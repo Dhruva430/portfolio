@@ -12,7 +12,7 @@ export default function Header() {
   return (
     <header className="top-0 left-0 right-0 z-50 border bg-black/20">
       <div className="px-4 py-4 flex  items-center justify-between max-w-7xl mx-auto">
-        <div className="flex items-center space-x-3 cursor-pointer group">
+        <div className="flex items-center space-x-3 group">
           <Code />
           <div className="flex flex-col">
             <span className="text-3xl">Dhruva</span>
@@ -31,7 +31,7 @@ export default function Header() {
               href={item.href}
               key={item.href}
               className={cn(
-                "flex items-center space-x-2 px-4 py-2 hover:bg-muted/30 hover:text-muted-foreground rounded-xl transition-all duration-250 cursor-pointer text-white/70 text-sm font-medium",
+                "flex items-center space-x-2 px-4 py-2 hover:bg-muted/30 hover:text-muted-foreground rounded-xl transition-all duration-250 text-white/70 text-sm font-medium cursor-none",
                 isActive(item.href) && "border border-green-500 text-green-500"
               )}
             >
