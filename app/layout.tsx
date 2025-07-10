@@ -10,7 +10,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html className="dark cursor-none dark:cursor-none" lang="en">
+    <html className="dark cursor-none  animate-color-cycle" lang="en">
       <body className={`${inter.className} dark:bg-black dark:text-white `}>
         <MouseTrail />
         <Header />

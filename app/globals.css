@@ -1,29 +1,42 @@
 @import "tailwindcss";
 @custom-variant dark (&:is(.dark *));
 
-@theme inline {
+@theme {
   --color-primary: var(--primary);
-  --color-background: var(--secondary);
-  --color-muted: var(--muted);
+  --color-background: var(--background);
+  --color-muted-background: var(--muted-background);
   --color-muted-foreground: var(--muted-foreground);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-foreground: var(--foreground);
+  --color-secondary: var(--secondary);
+  --color-border: var(--border);
 }
+
 :root {
-  --primary: #1a202c;
-  --secondary: #2d3748;
-  --accent: #4fd1c5;
   --font-base: "Inter", sans-serif;
-  --muted: #ffffff;
+  --primary: #1a202c;
+  --primary-foreground: black;
+  --secondary: #2d3748;
+  --muted-background: #edf2f7;
   --muted-foreground: #2d3748;
+  --foreground: #2d3748;
+  --background: #f7fafc;
 }
+
 .dark {
-  --primary: black;
-  --secondary: white;
-  --muted: #94a3b8;
+  --primary: rgb(255, 166, 0);
+  --primary-foreground: white;
+  --foreground: #ffffff;
   --muted-foreground: #ffffff;
+  --secondary: rgb(49, 49, 49);
+  --background: #000000;
+  --muted-background: #000000;
+  --border: #686565;
 }
+
+/* Keyframe animations */
 @theme {
   --animate-opacity-fade-out: opacity-fade-out 1s ease-in-out;
-
   @keyframes opacity-fade-out {
     0% {
       opacity: 0.5;
@@ -33,7 +46,27 @@
     }
   }
 }
+@theme {
+  --animate-color-cycle: color-cycle 25s linear infinite;
+  @keyframes color-cycle {
+    25% {
+      --primary: violet;
+      --primary-foreground: #850b7f;
+    }
+    50% {
+      --primary: blue;
+      --primary-foreground: #ffffff;
+    }
+    75% {
+      --primary: green;
+    }
+    100% {
+      --primary: red;
+    }
+  }
+}
 
+/* Mouse Trail */
 .circle {
   height: 24px;
   width: 24px;
@@ -60,5 +93,27 @@
 @media screen and (max-width: 750px) {
   .circle {
     display: none;
+  }
+}
+
+@utility text-gradient-primary {
+  @apply bg-gradient-to-r from-primary/80 to-primary;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@theme {
+  --animate-blink: blink 0.8s linear infinite;
+  @keyframes blink {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
   }
 }
