@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Rocket } from "lucide-react";
 export default function Home() {
