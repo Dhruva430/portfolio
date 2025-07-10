@@ -46,6 +46,126 @@
     }
   }
 }
+/* @theme {
+  --animate-float: float-up 3s linear infinite;
+  @keyframes float-up {
+    0% {
+      transform: translateY(200px);
+      opacity: 0;
+    }
+    30% {
+      opacity: 0.4;
+    }
+    50% {
+      opacity: 0.4;
+    }
+    100% {
+      transform: translateY(-100px);
+      opacity: 0;
+    }
+  }
+} */
+.anim {
+  animation-duration: 5s;
+  animation-fill-mode: both;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes float-up {
+  0% {
+    transform: translateY(300px);
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.4;
+  }
+  70% {
+    transform: translateY(50px);
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateY(-60px);
+    opacity: 0;
+  }
+}
+@keyframes float-up-middle {
+  0% {
+    transform: translateY(300px);
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+}
+
+.anim-1 {
+  animation-name: float-up;
+  animation-delay: 9s;
+}
+.anim-2 {
+  animation-name: float-up;
+  animation-delay: 3s;
+}
+.anim-3 {
+  animation-name: float-up;
+  animation-delay: 1s;
+}
+.anim-4 {
+  animation-name: float-up;
+  animation-delay: 6s;
+}
+.anim-5 {
+  animation-name: float-up;
+  animation-delay: 4s;
+}
+.anim-6 {
+  animation-name: float-up-middle;
+  animation-delay: 8s;
+}
+.anim-7 {
+  animation-name: float-up-middle;
+  animation-delay: 4s;
+}
+.anim-8 {
+  animation-name: float-up-middle;
+  animation-delay: 3s;
+}
+.anim-9 {
+  animation-name: float-up-middle;
+  animation-delay: 7.5s;
+}
+.anim-10 {
+  animation-name: float-up-middle;
+  animation-delay: 4.5s;
+}
+.anim-11 {
+  animation-name: float-up;
+  animation-delay: 9.5s;
+}
+.anim-12 {
+  animation-name: float-up;
+  animation-delay: 5.5s;
+}
+.anim-13 {
+  animation-name: float-up;
+  animation-delay: 4;
+}
+.anim-14 {
+  animation-name: float-up;
+  animation-delay: 1s;
+}
+.anim-15 {
+  animation-name: float-up;
+  animation-delay: 3s;
+}
 @theme {
   --animate-color-cycle: color-cycle 25s linear infinite;
   @keyframes color-cycle {
