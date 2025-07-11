@@ -1,31 +1,31 @@
-"use client";
 import Link from "next/link";
-import { Code, Database, Mail, Rocket, Server, Terminal } from "lucide-react";
-import { MorphSvg } from "@/components/morph/morphSvg";
-
-import Circle from "@/components/morph/morph1/circle";
-import Triangle from "@/components/morph/morph1/triangle";
-import Square from "@/components/morph/morph1/square";
-import Hexagon from "@/components/morph/morph1/hexagon";
-
-import Building from "@/components/morph/morph2/building";
-import Car from "@/components/morph/morph2/car";
-import WalkingDog from "@/components/morph/morph2/walkingDog";
-import House from "@/components/morph/morph2/house";
-
-import Atom from "@/components/morph/morph3/atom";
-import Flower from "@/components/morph/morph3/flower";
-import Globe from "@/components/morph/morph3/globe";
-import Entina from "@/components/morph/morph3/entina";
-
-import IceCream from "@/components/morph/morph4/iceCream";
-import Pizza from "@/components/morph/morph4/pizza";
-import Dinner from "@/components/morph/morph4/dinner";
-import Burger from "@/components/morph/morph4/burger";
+import {
+  Code,
+  Database,
+  Mail,
+  Rocket,
+  Server,
+  Terminal,
+  ArrowRight,
+} from "lucide-react";
 
 import Linkedin from "@/assets/linkedin.svg";
 import Github from "@/assets/github.svg";
 
+import { Badge } from "@/components/ui/badge";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@/components/ui/card";
+import { getProjects } from "./project/utils";
+import { Button } from "@/components/ui/button";
+import { toTitleCase } from "@/lib/utils";
+import MorphHandler from "@/components/morph/morph-handler";
+
+import { getBlogs } from "./blog/utils";
 const skills = [
   { name: "Python", level: 100 },
   { name: "Go", level: 90 },
@@ -34,6 +34,165 @@ const skills = [
   { name: "React", level: 75 },
 ];
 
+async function Portfolio() {
+  const allProjects = await getProjects();
+  const featuredProjects = allProjects.filter((project) => project.featured);
+  return (
+    <section className="py-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col items-center justify-center mb-10">
+          <h2 className="text-primary text-gradient-primary text-5xl font-bold mb-5">
+            Featured Projects
+          </h2>
+          <span className="h-2 w-50 bg-primary rounded-full "></span>
+          <h3 className="text-xl p-4 text-muted-foreground ">
+            A showcase of my skills in web development, system programming, and
+            open-source contributions.
+          </h3>
+        </div>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+          {featuredProjects.map((project, index) => (
+            <Card
+              key={project.title}
+              className="glass-card card-hover group animate-slide-up"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
+              <CardHeader className="flex-grow">
+                <CardTitle className="text-xl group-hover:text-primary transition-colors">
+                  {project.title}
+                </CardTitle>
+                <CardDescription className="text-base">
+                  {project.description}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex flex-wrap gap-2">
+                    {project.technologies.map((tech) => (
+                      <Badge key={tech} variant="secondary" className="text-xs">
+                        {tech}
+                      </Badge>
+                    ))}
+                  </div>
+                  <div className="flex items-center justify-between text-sm text-muted-foreground">
+                    <div className="flex items-center space-x-4">
+                      {project.github && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="p-0 h-auto font-medium group-hover:text-primary"
+                          asChild
+                        >
+                          <Link href={project.github} target="_blank">
+                            <Github className="mr-2 h-4 w-4" />
+                            View on GitHub
+                          </Link>
+                        </Button>
+                      )}
+                    </div>
+                    <Badge variant="outline" className="text-xs">
+                      {toTitleCase(project.status)}
+                    </Badge>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+        <Button variant="flicker" size={"xl"} asChild>
+          <Link href={"/projects"}>
+            <Rocket className="animate-bounce delay-800" />
+            View All Projects
+          </Link>
+        </Button>
+      </div>
+    </section>
+  );
+}
+async function Blog() {
+  const blogs = await getBlogs();
+  const latestPosts = blogs
+    .filter((post) => post.published)
+    .sort(
+      (a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime()
+    )
+    .slice(0, 3);
+  return (
+    <section className="py-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            Latest Insights
+          </h2>
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            I write about web development, system programming, Linux, and my
+            experiences with Go and Rust. Join me on this technical journey.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-30">
+          {latestPosts.map((post, index) => (
+            <Card
+              key={post.title}
+              className="glass-card card-hover group animate-slide-up"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
+              <CardHeader>
+                <div className="flex items-center justify-between mb-2">
+                  <Badge variant="outline" className="text-xs">
+                    {post.readingTime}
+                  </Badge>
+                  <span className="text-sm text-muted-foreground">
+                    {post.pubDate.toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </span>
+                </div>
+                <CardTitle className="text-xl group-hover:text-primary transition-colors">
+                  <Link href={`/blog/${post.slug}`}>{post.title}</Link>
+                </CardTitle>
+                <CardDescription className="text-base">
+                  {post.description}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {post.tags.map((tag) => (
+                    <Badge key={tag} variant="secondary" className="text-xs">
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="p-0 h-auto font-medium group-hover:text-primary"
+                  asChild
+                >
+                  <Link href={`/blog/${post.slug}`}>
+                    Read More
+                    <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        <div className="text-center mt-12">
+          <Button size="xl" variant="flicker" className="" asChild>
+            <Link href="/blog">
+              View All Posts
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Link>
+          </Button>
+        </div>
+      </div>
+    </section>
+  );
+}
 export default function Home() {
   return (
     <>
@@ -60,20 +219,18 @@ export default function Home() {
           </p>
 
           <div className="flex gap-10 items-center mb-16">
-            <Link
-              href={"/projects"}
-              className="text-primary-foreground text-gradiant-primary text-sm flex justify-center border-4 border-primary border-text-gradiant-primary gap-4 px-8 py-4 rounded-full font-medium shadow-2xl shadow-primary hover:scale-105 transition-transform delay cursor-none bg-gradient-to-r from-primary/80 to-primary"
-            >
-              <Rocket className="animate-bounce delay-800" />
-              <span>View My Work</span>
-            </Link>
-            <Link
-              href={"/contact"}
-              className="flex gap-4 justify-center bg-secondary/90 border-4 border-border font-medium px-8 py-4 text-sm rounded-full hover:scale-105 transition-transform delay cursor-none"
-            >
-              <Rocket className="animate-bounce delay-800" />
-              <span className="text-secondary-foreground">Get in Touch</span>
-            </Link>
+            <Button variant="flicker" size={"xl"} asChild>
+              <Link href={"/projects"}>
+                <Rocket className="animate-bounce delay-800" />
+                View my Work
+              </Link>
+            </Button>
+            <Button variant={"secondaryFlicker"} size={"xl"} asChild>
+              <Link href={"/contact"}>
+                <Rocket className="animate-bounce delay-800" />
+                <span className="text-secondary-foreground">Get in Touch</span>
+              </Link>
+            </Button>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-2xl mx-auto mb-4">
             {[
@@ -97,30 +254,7 @@ export default function Home() {
           </div>
         </div>
         <div className="flex gap-17 absolute h-screen w-screen left-0 right-0 bottom-0 top-130 -z-50">
-          {Array.from({ length: 15 }).map((_, i) => {
-            const index = i + 1;
-            const shapes = [
-              [Circle, Triangle, Square, Hexagon][i % 4],
-              [Building, Car, WalkingDog, House][i % 4],
-              [Atom, Flower, Globe, Entina][i % 4],
-              [IceCream, Pizza, Dinner, Burger][i % 4],
-            ];
-            const ids = [
-              `morph-${index}-1`,
-              `morph-${index}-2`,
-              `morph-${index}-3`,
-              `morph-${index}-4`,
-            ];
-            return (
-              <MorphSvg
-                key={index}
-                shapes={shapes}
-                ids={ids}
-                duration={7000}
-                className={`size-15 anim anim-${index}`}
-              />
-            );
-          })}
+          <MorphHandler />
         </div>
       </section>
       <section className="py-24 relative">
@@ -214,19 +348,8 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className="py-24 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col items-center justify-center mb-10">
-            <h2 className="text-primary text-gradient-primary text-5xl font-bold mb-5">
-              Featured Projects
-            </h2>
-            <span className="h-2 w-50 bg-primary rounded-full "></span>
-            <h3 className="text-xl p-4 text-muted-foreground ">
-              Get to know the person behind the code
-            </h3>
-          </div>
-        </div>
-      </section>
+      <Portfolio />
+      <Blog />
     </>
   );
 }

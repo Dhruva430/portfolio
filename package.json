@@ -9,13 +9,21 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@radix-ui/react-slot": "^1.2.3",
+    "@shikijs/rehype": "^3.7.0",
+    "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "gray-matter": "^4.0.3",
     "gsap": "^3.13.0",
     "lucide-react": "^0.525.0",
     "next": "15.3.5",
+    "next-mdx-remote": "^5.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "tailwind-merge": "^3.3.1"
+    "reading-duration": "^1.1.2",
+    "tailwind-merge": "^3.3.1",
+    "yaml": "^2.8.0",
+    "zod": "^4.0.5"
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",

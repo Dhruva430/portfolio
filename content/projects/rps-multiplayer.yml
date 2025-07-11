@@ -1,0 +1,20 @@
+title: "URL Shortner"
+description: "Originally conceived as my college project, Shortcut has evolved over time with occasional refinements. This project aims to overcome the shortcomings found in existing URL shorteners."
+date: "2025"
+featured: true
+technologies:
+  - TypeScript
+  - Next.js
+  - Prisma
+  - Zod
+  - Tailwind CSS
+  - PostgresSQL
+features:
+  - "Link shortening with custom backhalf"
+  - "QR Codes"
+  - "Can Edit Links and QR codes"
+  - "User friendly design"
+  - "Minimalistic design"
+  - "Overview (Track your links/QRs)"
+
+github: "https://github.com/Dhruva430/rps-websocket"
