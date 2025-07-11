@@ -27,11 +27,12 @@
   --primary: rgb(255, 166, 0);
   --primary-foreground: white;
   --foreground: #ffffff;
-  --muted-foreground: #ffffff;
+  --muted-foreground: #9a9a9a;
+  --text-foreground: #ffffff;
   --secondary: rgb(49, 49, 49);
   --background: #000000;
-  --muted-background: #000000;
-  --border: #686565;
+  --muted-background: #a39898;
+  --border: #9a9a9a;
 }
 
 /* Keyframe animations */
