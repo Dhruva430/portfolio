@@ -32,7 +32,7 @@
   --secondary: rgb(49, 49, 49);
   --background: #000000;
   --muted-background: #a39898;
-  --border: #9a9a9a;
+  --border: #535151;
 }
 
 /* Keyframe animations */
@@ -146,8 +146,8 @@
   --animate-color-cycle: color-cycle 25s linear infinite;
   @keyframes color-cycle {
     25% {
-      --primary: violet;
-      --primary-foreground: #850b7f;
+      --primary: #f45483;
+      --primary-foreground: #ffffff;
     }
     50% {
       --primary: blue;
@@ -193,7 +193,7 @@
 }
 
 @utility text-gradient-primary {
-  @apply bg-gradient-to-r from-primary/80 to-primary;
+  @apply bg-gradient-to-r from-primary/70 to-primary;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

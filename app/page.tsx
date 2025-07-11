@@ -1,9 +1,7 @@
 "use client";
 import Link from "next/link";
 import { Mail, Rocket } from "lucide-react";
-import { gsap } from "gsap";
-import { MorphSVGPlugin } from "gsap/MorphSVGPlugin";
-import { useEffect } from "react";
+import { MorphSvg } from "@/components/morph/morphSvg";
 
 import Circle from "@/components/morph/morph1/circle";
 import Triangle from "@/components/morph/morph1/triangle";
@@ -29,68 +27,6 @@ import Linkedin from "@/assets/linkedin.svg";
 import Github from "@/assets/github.svg";
 
 export default function Home() {
-  useEffect(() => {
-    gsap.registerPlugin(MorphSVGPlugin);
-
-    const morphs = Array.from({ length: 15 }).map((_, i) => [
-      `#morph-${i + 1}-1`,
-      `#morph-${i + 1}-2`,
-      `#morph-${i + 1}-3`,
-      `#morph-${i + 1}-4`,
-    ]);
-
-    const wait = (ms: number) => new Promise((res) => setTimeout(res, ms));
-    const DURATION = 3000;
-
-    async function loop() {
-      await wait(DURATION);
-      console.log("Starting morphing loop");
-
-      // 1 → 2
-      morphs.forEach(([from, to]) => {
-        console.log(from, to);
-        gsap.to(from, {
-          morphSVG: { shape: to, shapeIndex: 0 },
-          duration: 2,
-          ease: "power1.inOut",
-          immediateRender: false,
-        });
-      });
-
-      // 2 → 3
-      morphs.forEach(([_, from, to]) => {
-        gsap.to(from, {
-          morphSVG: { shape: to, shapeIndex: 0 },
-          duration: 2,
-          ease: "power1.inOut",
-          immediateRender: false,
-        });
-      });
-
-      // 3 → 4
-      morphs.forEach(([, , from, to]) => {
-        gsap.to(from, {
-          morphSVG: { shape: to, shapeIndex: 0 },
-          duration: 2,
-          ease: "power1.inOut",
-          immediateRender: false,
-        });
-      });
-
-      // 4 → 1
-      morphs.forEach(([to, , , from]) => {
-        gsap.to(from, {
-          morphSVG: { shape: to, shapeIndex: 0 },
-          duration: 2,
-          ease: "power1.inOut",
-          immediateRender: false,
-        });
-      });
-      requestAnimationFrame(loop);
-    }
-    requestAnimationFrame(loop);
-  }, []);
-
   return (
     <div className="relative overflow-hidden select-none ">
       <div className="max-w-7xl mx-auto flex  items-center flex-col ">
@@ -154,22 +90,26 @@ export default function Home() {
       <div className="flex gap-17 absolute h-screen w-screen left-0 right-0 bottom-0 top-100 -z-50">
         {Array.from({ length: 15 }).map((_, i) => {
           const index = i + 1;
-          const Component1 = [Circle, Triangle, Square, Hexagon][i % 4];
-          const Component2 = [Building, Car, WalkingDog, House][i % 4];
-          const Component3 = [Atom, Flower, Globe, Entina][i % 4];
-          const Component4 = [IceCream, Pizza, Dinner, Burger][i % 4];
-
+          const shapes = [
+            [Circle, Triangle, Square, Hexagon][i % 4],
+            [Building, Car, WalkingDog, House][i % 4],
+            [Atom, Flower, Globe, Entina][i % 4],
+            [IceCream, Pizza, Dinner, Burger][i % 4],
+          ];
+          const ids = [
+            `morph-${index}-1`,
+            `morph-${index}-2`,
+            `morph-${index}-3`,
+            `morph-${index}-4`,
+          ];
           return (
-            <svg
+            <MorphSvg
               key={index}
+              shapes={shapes}
+              ids={ids}
+              duration={7000}
               className={`size-15 anim anim-${index}`}
-              viewBox="0 0 100 100"
-            >
-              <Component1 id={`morph-${index}-1`} />
-              <Component2 id={`morph-${index}-2`} className="opacity-0" />
-              <Component3 id={`morph-${index}-3`} className="opacity-0" />
-              <Component4 id={`morph-${index}-4`} className="opacity-0" />
-            </svg>
+            />
           );
         })}
       </div>
