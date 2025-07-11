@@ -46,27 +46,9 @@
     }
   }
 }
-/* @theme {
-  --animate-float: float-up 3s linear infinite;
-  @keyframes float-up {
-    0% {
-      transform: translateY(200px);
-      opacity: 0;
-    }
-    30% {
-      opacity: 0.4;
-    }
-    50% {
-      opacity: 0.4;
-    }
-    100% {
-      transform: translateY(-100px);
-      opacity: 0;
-    }
-  }
-} */
+
 .anim {
-  animation-duration: 5s;
+  animation-duration: 10s;
   animation-fill-mode: both;
   animation-iteration-count: infinite;
   animation-timing-function: ease-in-out;
@@ -74,34 +56,27 @@
 
 @keyframes float-up {
   0% {
-    transform: translateY(300px);
+    transform: translateY(300px) rotate(0deg);
     opacity: 0;
   }
   30% {
     opacity: 0.4;
   }
-  70% {
-    transform: translateY(50px);
-    opacity: 0.4;
-  }
   100% {
-    transform: translateY(-60px);
+    transform: translateY(-60px) rotate(360deg);
     opacity: 0;
   }
 }
 @keyframes float-up-middle {
   0% {
-    transform: translateY(300px);
+    transform: translateY(300px) rotate(0deg);
     opacity: 0;
   }
   30% {
     opacity: 0.4;
   }
-  50% {
-    opacity: 0.4;
-  }
   100% {
-    transform: translateY(30px);
+    transform: translateY(30px) rotate(360deg);
     opacity: 0;
   }
 }
