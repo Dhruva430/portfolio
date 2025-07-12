@@ -15,7 +15,7 @@ export default function Header() {
         <div className="flex items-center space-x-3 group">
           <Code className="text-primary-foreground" />
           <div className="flex flex-col">
-            <span className="text-3xl text-primary text-gradiant-primary">
+            <span className="text-3xl text-primary text-gradient-primary">
               Dhruva
             </span>
             <span className="text-xs">Software Engineer</span>

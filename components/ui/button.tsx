@@ -21,18 +21,19 @@ const buttonVariants = cva(
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
         flicker:
-          "text-primary-foreground text-gradiant-primary text-sm flex justify-center rounded-full border-3 border-primary font-medium shadow-2xl shadow-primary hover:scale-105 transition-transform delay cursor-none bg-gradient-to-r from-primary/50 to-primary",
+          "text-primary-foreground text-gradiant-primary text-sm flex justify-center rounded-full  font-medium shadow-2xl shadow-primary hover:scale-105 transition-transform delay cursor-none bg-gradient-to-r from-primary/50 to-primary",
         secondaryFlicker:
           "flex gap-4 justify-center bg-secondary/90 border-3 border-border font-medium px-8 py-4 text-sm rounded-full hover:scale-105 transition-transform delay cursor-none",
         footer:
-          "gap-1 text-sm text-secondary hover:text-primary/80 transition-colors",
+          "gap-1 text-sm text-muted-foreground hover:text-primary/80 transition-colors",
       },
       size: {
         default: "h-9 px-4 py-2",
         sm: "h-8 rounded-md gap-1.5 px-3",
         lg: "h-11 rounded-md px-8",
         icon: "size-9",
-        xl: " gap-4 px-8 py-4 w-50",
+        secondaryXL: "gap-4 px-8 py-[18px] w-50",
+        xl: " gap-4 px-8 py-5 w-50",
       },
     },
     defaultVariants: {

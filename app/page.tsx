@@ -35,11 +35,181 @@ const skills = [
 ];
 import { Footer } from "@/components/footer";
 
+function Hero() {
+  return (
+    <section className=" overflow-hidden select-none   mb-33 ">
+      <div className="max-w-7xl mx-auto flex  items-center flex-col ">
+        <div className="flex items-end relative mt-30">
+          <h2 className="text-4xl font-mono font-bold">whoami</h2>
+          <span className="h-1 w-4 animate-blink absolute bg-foreground right-0 top-6 translate-x-full"></span>
+        </div>
+
+        <h1 className="text-7xl font-bold text-gradient-primary p-2 text-primary ">
+          Dhruva Kushwaha
+        </h1>
+        <p className="text-muted-foreground text-xl font-mono my-3">
+          Software Engineer | Full Stack Developer | Open Source Enthusiast
+        </p>
+        <p className="text-2xl max-w-4xl text-center text-muted-foreground mb-12 ">
+          Software Engineer passionate about{" "}
+          <span className="text-green-500">system-level programming</span>,
+          clean code, and building performant web applications with
+          <span className="text-blue-600"> Go</span>,
+          <span className="text-orange-500"> Rust</span>, and modern web
+          technologies.
+        </p>
+
+        <div className="flex gap-10 items-center mb-16">
+          <Button variant="flicker" size={"xl"} asChild>
+            <Link href={"/projects"}>
+              <Rocket className="animate-bounce delay-800" />
+              View my Work
+            </Link>
+          </Button>
+          <Button variant={"secondaryFlicker"} size={"secondaryXL"} asChild>
+            <Link href={"/contact"}>
+              <Rocket className="animate-bounce delay-800" />
+              <span className="text-secondary-foreground">Get in Touch</span>
+            </Link>
+          </Button>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-2xl mx-auto mb-4">
+          {[
+            { value: "10+", label: "Projects" },
+            { value: "5+", label: "Languages" },
+            { value: "2+", label: "Year of Experience" },
+            { value: "2+", label: "Open Source Contributions" },
+          ].map((item) => (
+            <div className="text-center" key={item.label}>
+              <div className="text-3xl font-bold text-primary mb-2">
+                {item.value}
+              </div>
+              <div className="text-muted-foreground">{item.label}</div>
+            </div>
+          ))}
+        </div>
+        <div className="flex gap-6 p-4">
+          <Github
+            href="https://github.com/Dhruva430"
+            className="text-muted-foreground size-9 hover:text-primary "
+          />
+          <Linkedin
+            href="https://www.linkedin.com/in/dhruva430/"
+            className="text-muted-foreground size-9 hover:text-primary"
+          />
+          <Mail
+            href="https://mail.google.com/mail/u/0/?fs=1&tf=cm&source=mailto&to=rdhruva12345@gmail.com"
+            className="text-muted-foreground size-9 hover:text-primary  "
+          />
+        </div>
+      </div>
+      <div className="flex gap-17 fixed left-0 right-0 bottom-0 scale-230 top-200 h-screen w-screen max-w-7xl mx-auto -z-50">
+        <MorphHandler />
+      </div>
+    </section>
+  );
+}
+function About() {
+  return (
+    <section className="py-24 relative mb-30">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col items-center justify-center mb-10">
+          <h2 className="text-primary text-gradient-primary text-5xl font-bold mb-5">
+            ABOUT ME
+          </h2>
+          <span className="h-2 w-50 bg-primary rounded-full "></span>
+          <h3 className="text-xl p-4 text-muted-foreground ">
+            Get to know the person behind the code
+          </h3>
+        </div>
+        <div className="grid sm:grid-cols-2 gap-10 items-center ">
+          <div className="grid grid-cols-2 gap-2">
+            {[
+              {
+                icon: <Code />,
+                title: "Frontend",
+                description: "React, Next.js, TypeScript",
+              },
+              {
+                icon: <Server />,
+                title: "Backend",
+                description: "Go, Rust, Node.js",
+              },
+              {
+                icon: <Database />,
+                title: "Database",
+                description: "PostgreSQL, MongoDB",
+              },
+              {
+                icon: <Terminal />,
+                title: "System",
+                description: "Linux, Docker, AWS",
+              },
+            ].map((item) => (
+              <div
+                className="flex items-center gap-3 border border-muted-background rounded-xl p-4 "
+                key={item.title}
+              >
+                <div className="p-3 bg-primary/20 text-primary rounded-xl w-12 h-12">
+                  {item.icon}
+                </div>
+                <div>
+                  <h3>{item.title}</h3>
+                  <span className="text-muted-foreground">
+                    {item.description}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className=" space-y-4">
+            <h1 className="text-foreground text-4xl font-bold">
+              Passionate Developer with interest in
+              <span> Backend Technologies</span>
+            </h1>
+            <p className="text-muted-foreground text-lg">
+              I am a passionate software engineer with a strong foundation in
+              system-level programming and web development. I love building
+              scalable, efficient, and user-friendly applications that solve
+              real-world problems.
+            </p>
+            <p className="text-muted-foreground text-lg">
+              When I'm not coding, you can find me exploring new technologies,
+              contributing to open source projects, or sharing my knowledge
+              through blog posts and talks.
+            </p>
+
+            <div className="space-y-4">
+              {skills.map((skill, index) => (
+                <div key={skill.name} className="space-y-2">
+                  <div className="flex justify-between">
+                    <span className="font-medium">{skill.name}</span>
+                    <span className="text-primary">{skill.level}%</span>
+                  </div>
+                  <div className="skill-bar">
+                    <div
+                      className="skill-progress"
+                      style={{
+                        width: `${skill.level}%`,
+                        animationDelay: `${index * 0.2}s`,
+                      }}
+                    ></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 async function Portfolio() {
   const allProjects = await getProjects();
   const featuredProjects = allProjects.filter((project) => project.featured);
   return (
-    <section className="py-24">
+    <section className="py-24 bg-page-background/40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center justify-center mb-10">
           <h2 className="text-primary text-gradient-primary text-5xl font-bold mb-5">
@@ -100,12 +270,14 @@ async function Portfolio() {
             </Card>
           ))}
         </div>
-        <Button variant="flicker" size={"xl"} asChild>
-          <Link href={"/projects"}>
-            <Rocket className="animate-bounce delay-800" />
-            View All Projects
-          </Link>
-        </Button>
+        <div className="text-center mt-12">
+          <Button size="xl" variant="flicker" className="" asChild>
+            <Link href="/projects">
+              View All Projects
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Link>
+          </Button>
+        </div>
       </div>
     </section>
   );
@@ -119,7 +291,7 @@ async function Blog() {
     )
     .slice(0, 3);
   return (
-    <section className="py-24">
+    <section className="py-24 bg-page-background/40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center justify-center mb-10">
           <h2 className="text-primary text-gradient-primary text-5xl font-bold mb-5">
@@ -197,159 +369,9 @@ async function Blog() {
 export default function Home() {
   return (
     <>
-      <section className=" overflow-hidden select-none ">
-        <div className="max-w-7xl mx-auto flex  items-center flex-col ">
-          <div className="flex items-end relative mt-30">
-            <h2 className="text-4xl font-mono font-bold">whoami</h2>
-            <span className="h-1 w-4 animate-blink absolute bg-foreground right-0 top-6 translate-x-full"></span>
-          </div>
-
-          <h1 className="text-7xl font-bold text-gradient-primary p-2 text-primary ">
-            Dhruva Kushwaha
-          </h1>
-          <p className="text-muted-foreground text-xl font-mono my-3">
-            Software Engineer | Full Stack Developer | Open Source Enthusiast
-          </p>
-          <p className="text-2xl max-w-4xl text-center text-muted-foreground mb-12">
-            Software Engineer passionate about{" "}
-            <span className="text-green-500">system-level programming</span>,
-            clean code, and building performant web applications with
-            <span className="text-blue-600"> Go</span>,
-            <span className="text-orange-500"> Rust</span>, and modern web
-            technologies.
-          </p>
-
-          <div className="flex gap-10 items-center mb-16">
-            <Button variant="flicker" size={"xl"} asChild>
-              <Link href={"/projects"}>
-                <Rocket className="animate-bounce delay-800" />
-                View my Work
-              </Link>
-            </Button>
-            <Button variant={"secondaryFlicker"} size={"xl"} asChild>
-              <Link href={"/contact"}>
-                <Rocket className="animate-bounce delay-800" />
-                <span className="text-secondary-foreground">Get in Touch</span>
-              </Link>
-            </Button>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-2xl mx-auto mb-4">
-            {[
-              { value: "10+", label: "Projects" },
-              { value: "5+", label: "Languages" },
-              { value: "2+", label: "Year of Experience" },
-              { value: "2+", label: "Open Source Contributions" },
-            ].map((item) => (
-              <div className="text-center" key={item.label}>
-                <div className="text-3xl font-bold text-primary mb-2">
-                  {item.value}
-                </div>
-                <div className="text-muted-foreground">{item.label}</div>
-              </div>
-            ))}
-          </div>
-          <div className="flex gap-6 mb-30 p-4">
-            <Github className="text-muted-foreground size-9 hover:text-primary " />
-            <Linkedin className="text-muted-foreground size-9 hover:text-primary" />
-            <Mail className="text-muted-foreground size-9 hover:text-primary  " />
-          </div>
-        </div>
-        <div className="flex gap-17 fixed h-screen w-screen left-0 right-0 bottom-0 top-130 -z-50">
-          <MorphHandler />
-        </div>
-      </section>
-      <section className="py-24 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col items-center justify-center mb-10">
-            <h2 className="text-primary text-gradient-primary text-5xl font-bold mb-5">
-              ABOUT ME
-            </h2>
-            <span className="h-2 w-50 bg-primary rounded-full "></span>
-            <h3 className="text-xl p-4 text-muted-foreground ">
-              Get to know the person behind the code
-            </h3>
-          </div>
-          <div className="grid sm:grid-cols-2 gap-10 items-center ">
-            <div className="grid grid-cols-2 gap-2">
-              {[
-                {
-                  icon: <Code />,
-                  title: "Frontend",
-                  description: "React, Next.js, TypeScript",
-                },
-                {
-                  icon: <Server />,
-                  title: "Backend",
-                  description: "Go, Rust, Node.js",
-                },
-                {
-                  icon: <Database />,
-                  title: "Database",
-                  description: "PostgreSQL, MongoDB",
-                },
-                {
-                  icon: <Terminal />,
-                  title: "System",
-                  description: "Linux, Docker, AWS",
-                },
-              ].map((item) => (
-                <div
-                  className="flex items-center gap-3 border border-muted-background rounded-xl p-4 "
-                  key={item.title}
-                >
-                  <div className="p-3 bg-primary/20 text-primary rounded-xl w-12 h-12">
-                    {item.icon}
-                  </div>
-                  <div>
-                    <h3>{item.title}</h3>
-                    <span className="text-muted-foreground">
-                      {item.description}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className=" space-y-4">
-              <h1 className="text-foreground text-4xl font-bold">
-                Passionate Developer with interest in
-                <span> Backend Technologies</span>
-              </h1>
-              <p className="text-muted-foreground text-lg">
-                I am a passionate software engineer with a strong foundation in
-                system-level programming and web development. I love building
-                scalable, efficient, and user-friendly applications that solve
-                real-world problems.
-              </p>
-              <p className="text-muted-foreground text-lg">
-                When I'm not coding, you can find me exploring new technologies,
-                contributing to open source projects, or sharing my knowledge
-                through blog posts and talks.
-              </p>
-
-              <div className="space-y-4">
-                {skills.map((skill, index) => (
-                  <div key={skill.name} className="space-y-2">
-                    <div className="flex justify-between">
-                      <span className="font-medium">{skill.name}</span>
-                      <span className="text-primary">{skill.level}%</span>
-                    </div>
-                    <div className="skill-bar">
-                      <div
-                        className="skill-progress"
-                        style={{
-                          width: `${skill.level}%`,
-                          animationDelay: `${index * 0.2}s`,
-                        }}
-                      ></div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <Hero />
       <Portfolio />
+      <About />
       <Blog />
       <Footer />
     </>

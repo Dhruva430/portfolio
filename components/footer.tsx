@@ -54,7 +54,7 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="relative mt-20 glass-card border-0 border-t border-primary backdrop-blur-md">
+    <footer className="relative glass-card border-0 border-t border-primary backdrop-blur-md">
       {/* Ocean wave decoration at top */}
       <div className="absolute top-0 left-0 w-full h-1  opacity-50"></div>
 
@@ -118,7 +118,7 @@ export function Footer() {
             <Button className="mt-4" variant="footer" size="sm" asChild>
               <Link href="/about">
                 View all skills
-                <ExternalLink className="size-3" />
+                <ExternalLink className="size-3 " />
               </Link>
             </Button>
           </div>

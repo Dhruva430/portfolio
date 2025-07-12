@@ -12,6 +12,7 @@
   --color-border: var(--border);
   --color-muted: var(--muted-background);
   --color-card: var(--bg-card);
+  --color-page-background: var(--page-background);
 }
 
 :root {
@@ -36,6 +37,7 @@
   --muted-background: #a39898;
   --border: #535151;
   --bg-card: #1a202c;
+  --page-background: #242b37;
 }
 
 /* Keyframe animations */
@@ -345,4 +347,40 @@
   figcaption {
     @apply text-sm text-muted-foreground text-center mt-2;
   }
+}
+
+@utility card-hover {
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.1),
+      transparent
+    );
+    transition: left 0.5s;
+  }
+
+  &:hover::before {
+    left: 100%;
+  }
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  }
+}
+
+.card-hover:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 }
