@@ -24,6 +24,8 @@ const buttonVariants = cva(
           "text-primary-foreground text-gradiant-primary text-sm flex justify-center rounded-full border-3 border-primary font-medium shadow-2xl shadow-primary hover:scale-105 transition-transform delay cursor-none bg-gradient-to-r from-primary/50 to-primary",
         secondaryFlicker:
           "flex gap-4 justify-center bg-secondary/90 border-3 border-border font-medium px-8 py-4 text-sm rounded-full hover:scale-105 transition-transform delay cursor-none",
+        footer:
+          "gap-1 text-sm text-secondary hover:text-primary/80 transition-colors",
       },
       size: {
         default: "h-9 px-4 py-2",

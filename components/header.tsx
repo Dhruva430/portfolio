@@ -33,8 +33,8 @@ export default function Header() {
               href={item.href}
               key={item.href}
               className={cn(
-                "flex items-center space-x-2 px-4 py-2 hover:bg-muted/30 hover:text-muted-foreground rounded-xl transition-all duration-250 text-white/70 text-sm font-medium cursor-none",
-                isActive(item.href) && "border border-green-500 text-green-500"
+                "flex items-center space-x-2 px-4 py-2 hover:bg-muted/15 hover:text-foreground rounded-xl transition-all duration-100 text-white/70 text-sm font-medium cursor-none",
+                isActive(item.href) && " bg-primary/20 text-primary"
               )}
             >
               <span className="hover:animate-opacity-fade-out">

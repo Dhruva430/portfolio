@@ -11,6 +11,7 @@
   --color-secondary: var(--secondary);
   --color-border: var(--border);
   --color-muted: var(--muted-background);
+  --color-card: var(--bg-card);
 }
 
 :root {
@@ -34,6 +35,7 @@
   --background: #000000;
   --muted-background: #a39898;
   --border: #535151;
+  --bg-card: #1a202c;
 }
 
 /* Keyframe animations */

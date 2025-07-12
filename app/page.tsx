@@ -33,6 +33,7 @@ const skills = [
   { name: "JavaScript", level: 85 },
   { name: "React", level: 75 },
 ];
+import { Footer } from "@/components/footer";
 
 async function Portfolio() {
   const allProjects = await getProjects();
@@ -120,14 +121,14 @@ async function Blog() {
   return (
     <section className="py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            Latest Insights
+        <div className="flex flex-col items-center justify-center mb-10">
+          <h2 className="text-primary text-gradient-primary text-5xl font-bold mb-5">
+            Latest Insight
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            I write about web development, system programming, Linux, and my
-            experiences with Go and Rust. Join me on this technical journey.
-          </p>
+          <span className="h-2 w-50 bg-primary rounded-full "></span>
+          <h3 className="text-xl p-4 text-muted-foreground ">
+            Get to know the person behind the code
+          </h3>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-30">
@@ -196,7 +197,7 @@ async function Blog() {
 export default function Home() {
   return (
     <>
-      <section className="relative overflow-hidden select-none ">
+      <section className=" overflow-hidden select-none ">
         <div className="max-w-7xl mx-auto flex  items-center flex-col ">
           <div className="flex items-end relative mt-30">
             <h2 className="text-4xl font-mono font-bold">whoami</h2>
@@ -253,7 +254,7 @@ export default function Home() {
             <Mail className="text-muted-foreground size-9 hover:text-primary  " />
           </div>
         </div>
-        <div className="flex gap-17 absolute h-screen w-screen left-0 right-0 bottom-0 top-130 -z-50">
+        <div className="flex gap-17 fixed h-screen w-screen left-0 right-0 bottom-0 top-130 -z-50">
           <MorphHandler />
         </div>
       </section>
@@ -350,6 +351,7 @@ export default function Home() {
       </section>
       <Portfolio />
       <Blog />
+      <Footer />
     </>
   );
 }
