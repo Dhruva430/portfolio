@@ -40,19 +40,19 @@ const skills = [
 function Hero() {
   return (
     <section className=" overflow-hidden select-none   mb-33 ">
-      <div className="max-w-7xl mx-auto flex  items-center flex-col sm:px-6 lg:px-8 ">
+      <div className="max-w-7xl mx-auto flex  items-center flex-col px-4 sm:px-6 lg:px-8 ">
         <div className="flex items-end relative mt-30">
           <h2 className="text-4xl font-mono font-bold">whoami</h2>
           <span className="h-1 w-4 animate-blink absolute bg-foreground right-0 top-6 translate-x-full"></span>
         </div>
 
-        <h1 className="md:text-7xl text-5xl font-bold text-gradient-primary p-2 text-primary mb-4">
+        <h1 className="md:text-7xl text-3xl font-bold text-gradient-primary p-2 text-primary mb-4">
           Dhruva Kushwaha
         </h1>
-        <p className="text-muted-foreground text-xl font-mono my-3 hidden sm:block">
+        <p className="text-muted-foreground text-sm sm:text-2xl font-mono my-3 text-center">
           Software Engineer | Full Stack Developer | Open Source Enthusiast
         </p>
-        <p className="text-2xl max-w-4xl text-center text-muted-foreground mb-12 ">
+        <p className="text-2base md:text-2xl max-w-4xl text-center text-muted-foreground mb-12 ">
           Software Engineer passionate about{" "}
           <span className="text-green-500">system-level programming</span>,
           clean code, and building performant web applications with
@@ -61,7 +61,7 @@ function Hero() {
           technologies.
         </p>
 
-        <div className="flex gap-10 items-center mb-16">
+        <div className="flex flex-col sm:flex-row gap-2 items-center mb-16">
           <Button variant="flicker" size={"xl"} asChild>
             <Link href={"/projects"}>
               <Rocket className="animate-bounce delay-800" />
@@ -116,16 +116,16 @@ function About() {
     <section className="py-24 relative mb-30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center justify-center mb-10">
-          <h2 className="text-primary text-gradient-primary text-5xl font-bold mb-5">
+          <h2 className="text-primary text-gradient-primary sm:text-5xl text-3xl font-bold mb-5">
             ABOUT ME
           </h2>
           <span className="h-2 w-50 bg-primary rounded-full "></span>
-          <h3 className="text-xl p-4 text-muted-foreground ">
+          <h3 className="text-base sm:text-xl p-4 text-muted-foreground ">
             Get to know the person behind the code
           </h3>
         </div>
         <div className="grid sm:grid-cols-2 gap-10 items-center ">
-          <div className="grid grid-cols-2 gap-2">
+          <div className="sm:grid-cols-2 grid grid-cols-1 gap-2">
             {[
               {
                 icon: <Code />,
@@ -165,17 +165,17 @@ function About() {
             ))}
           </div>
           <div className=" space-y-4">
-            <h1 className="text-foreground text-4xl font-bold">
+            <h1 className="text-foreground text-3xl  sm:text-4xl font-bold">
               Passionate Developer with interest in
               <span> Backend Technologies</span>
             </h1>
-            <p className="text-muted-foreground text-lg">
+            <p className="text-muted-foreground text-base sm:text-lg">
               I am a passionate software engineer with a strong foundation in
               system-level programming and web development. I love building
               scalable, efficient, and user-friendly applications that solve
               real-world problems.
             </p>
-            <p className="text-muted-foreground text-lg">
+            <p className="text-muted-foreground text-base sm:text-lg">
               When I'm not coding, you can find me exploring new technologies,
               contributing to open source projects, or sharing my knowledge
               through blog posts and talks.
@@ -214,11 +214,11 @@ async function Portfolio() {
     <section className="py-24 bg-page-background/40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center justify-center mb-10">
-          <h2 className="text-primary text-gradient-primary text-5xl font-bold mb-5">
+          <h2 className="text-primary  text-gradient-primary sm:text-5xl text-3xl font-bold mb-5">
             Featured Projects
           </h2>
           <span className="h-2 w-50 bg-primary rounded-full "></span>
-          <h3 className="text-xl p-4 text-muted-foreground ">
+          <h3 className="p-4 text-muted-foreground text-base sm:text-xl">
             A showcase of my skills in web development, system programming, and
             open-source contributions.
           </h3>
@@ -296,11 +296,11 @@ async function Blog() {
     <section className="py-24 bg-page-background/40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center justify-center mb-10">
-          <h2 className="text-primary text-gradient-primary text-5xl font-bold mb-5">
+          <h2 className="text-primary text-gradient-primary  sm:text-5xl text-2xl font-bold mb-5">
             Latest Insight
           </h2>
           <span className="h-2 w-50 bg-primary rounded-full "></span>
-          <h3 className="text-xl p-4 text-muted-foreground ">
+          <h3 className="sm:text-xl p-4 text-muted-foreground text-base ">
             Get to know the person behind the code
           </h3>
         </div>
