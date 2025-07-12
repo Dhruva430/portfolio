@@ -105,7 +105,7 @@ function Hero() {
           />
         </div>
       </div>
-      <div className="flex gap-17 fixed left-0 right-0 bottom-0 scale-230 top-200 h-screen w-screen max-w-7xl mx-auto -z-50">
+      <div className="flex justify-center gap-10 fixed left-0 right-0 bottom-0  top-140 h-screen w-screen max-w-[2000px] mx-auto -z-50">
         <MorphHandler />
       </div>
     </section>

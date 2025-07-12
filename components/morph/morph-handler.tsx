@@ -40,7 +40,7 @@ export default function MorphHandler() {
         shapes={shapes}
         ids={ids}
         duration={7000}
-        className={`size-15 anim anim-${index}`}
+        className={`size-20 anim anim-${index}`}
       />
     );
   });
