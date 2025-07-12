@@ -16,6 +16,7 @@
     "@shikijs/rehype": "^3.7.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "copy-webpack-plugin": "^13.0.0",
     "gray-matter": "^4.0.3",
     "gsap": "^3.13.0",
     "lucide-react": "^0.525.0",
@@ -32,6 +33,7 @@
     "yaml": "^2.8.0",
     "zod": "^4.0.5"
   },
+  "packageManager": "pnpm@10.12.4",
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",
     "@tailwindcss/postcss": "^4",
