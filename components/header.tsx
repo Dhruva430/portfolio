@@ -13,13 +13,16 @@ export default function Header() {
     <header className="sticky top-0 left-0 right-0 z-50  border-b border-muted-foreground/10 bg-black/80">
       <div className="px-4 py-4 flex  items-center justify-between max-w-7xl mx-auto">
         <div className="flex items-center space-x-3 group">
-          <Code className="text-primary-foreground" />
-          <div className="flex flex-col">
+          <div className="text-primary-foreground bg-primary p-2 rounded-full">
+            <Code className="size-6 animate-oscillate" />
+          </div>
+
+          <Link href={"/"} className="cursor-none flex flex-col">
             <span className="text-3xl text-primary text-gradient-primary">
               Dhruva
             </span>
             <span className="text-xs">Software Engineer</span>
-          </div>
+          </Link>
         </div>
         <nav className="hidden md:flex space-x-4  p-2 backdrop-blur-sm">
           {[

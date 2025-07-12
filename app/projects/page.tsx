@@ -19,7 +19,9 @@ export default async function Projects() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16 animate-fade-in">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">My Projects</h1>
+          <h1 className="text-4xl text-primary md:text-5xl font-bold mb-6">
+            My Projects
+          </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             A collection of my work spanning web development, system
             programming, and open-source contributions. Each project represents
@@ -54,9 +56,7 @@ export default async function Projects() {
               <Link href="/contact">Get In Touch</Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
-              <Link href="https://github.com/shivangrathore">
-                View My GitHub
-              </Link>
+              <Link href="https://github.com/Dhruva430">View My GitHub</Link>
             </Button>
           </div>
         </div>

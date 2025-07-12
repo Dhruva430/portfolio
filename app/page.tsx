@@ -23,7 +23,7 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
-import { getProjects } from "./project/utils";
+import { getProjects } from "./projects/utils";
 import { Button } from "@/components/ui/button";
 import { toTitleCase } from "@/lib/utils";
 import MorphHandler from "@/components/morph/morph-handler";
@@ -40,16 +40,16 @@ const skills = [
 function Hero() {
   return (
     <section className=" overflow-hidden select-none   mb-33 ">
-      <div className="max-w-7xl mx-auto flex  items-center flex-col ">
+      <div className="max-w-7xl mx-auto flex  items-center flex-col sm:px-6 lg:px-8 ">
         <div className="flex items-end relative mt-30">
           <h2 className="text-4xl font-mono font-bold">whoami</h2>
           <span className="h-1 w-4 animate-blink absolute bg-foreground right-0 top-6 translate-x-full"></span>
         </div>
 
-        <h1 className="text-7xl font-bold text-gradient-primary p-2 text-primary ">
+        <h1 className="md:text-7xl text-5xl font-bold text-gradient-primary p-2 text-primary mb-4">
           Dhruva Kushwaha
         </h1>
-        <p className="text-muted-foreground text-xl font-mono my-3">
+        <p className="text-muted-foreground text-xl font-mono my-3 hidden sm:block">
           Software Engineer | Full Stack Developer | Open Source Enthusiast
         </p>
         <p className="text-2xl max-w-4xl text-center text-muted-foreground mb-12 ">

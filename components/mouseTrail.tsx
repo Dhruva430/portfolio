@@ -1,9 +1,19 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 //  Make them scatter on hero section and them combine then on mouse move
 export const MouseTrail = () => {
+  const [enabled, setEnabled] = useState(true);
   useEffect(() => {
+    function handleResize() {
+      setEnabled(window.innerWidth >= 768);
+    }
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+  useEffect(() => {
+    if (!enabled) return;
     const coords = { x: 0, y: 0 };
     const circles = document.querySelectorAll<
       HTMLElement & { x: number; y: number }

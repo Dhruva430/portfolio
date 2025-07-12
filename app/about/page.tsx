@@ -13,7 +13,9 @@ export default function About() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16 animate-fade-in">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">About Me</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-6 text-primary">
+            About Me
+          </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             A passionate developer with a deep love for technology, clean code,
             and building things that make a difference.

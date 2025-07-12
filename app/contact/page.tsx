@@ -18,7 +18,9 @@ export default function Contact() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16 animate-fade-in">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">Get In Touch</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-6 text-primary">
+            Get In Touch
+          </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             I'm always interested in hearing about new opportunities,
             collaborations, or just having a conversation about technology. Feel

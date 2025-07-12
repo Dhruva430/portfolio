@@ -12,8 +12,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html className="dark cursor-none  animate-color-cycle" lang="en">
-      <body className={`${inter.className} dark:bg-black dark:text-white `}>
+    <html
+      className="dark md:cursor-none select-none animate-color-cycle"
+      lang="en"
+    >
+      <body
+        className={`${inter.className} dark:bg-background dark:text-foreground `}
+      >
         <MouseTrail />
         <Header />
         <main>{children}</main>

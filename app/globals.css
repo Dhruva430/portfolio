@@ -166,6 +166,21 @@
     }
   }
 }
+@theme {
+  --animate-oscillate: oscillate 3s ease-in-out infinite;
+
+  @keyframes oscillate {
+    0% {
+      transform: rotate(-10deg);
+    }
+    50% {
+      transform: rotate(10deg);
+    }
+    100% {
+      transform: rotate(-10deg);
+    }
+  }
+}
 
 /* Mouse Trail */
 .circle {

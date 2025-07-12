@@ -13,7 +13,9 @@ export default async function Blog() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12 animate-fade-in">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Blog</h1>
+          <h1 className="text-4xl text-primary md:text-5xl font-bold mb-4">
+            Blog
+          </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Thoughts and insights on web development, system programming, Linux,
             and my journey with Go and Rust.

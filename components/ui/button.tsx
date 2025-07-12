@@ -5,7 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center mx-auto gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all cursor-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none    ",
+  "inline-flex items-center justify-center mx-auto gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all md:cursor-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none    ",
   {
     variants: {
       variant: {
@@ -21,9 +21,9 @@ const buttonVariants = cva(
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
         flicker:
-          "text-primary-foreground text-gradiant-primary text-sm flex justify-center rounded-full  font-medium shadow-2xl shadow-primary hover:scale-105 transition-transform delay cursor-none bg-gradient-to-r from-primary/50 to-primary",
+          "text-primary-foreground text-gradiant-primary text-sm flex justify-center rounded-full  font-medium shadow-2xl shadow-primary hover:scale-105 transition-transform delay md:cursor-none bg-gradient-to-r from-primary/50 to-primary",
         secondaryFlicker:
-          "flex gap-4 justify-center bg-secondary/90 border-3 border-border font-medium px-8 py-4 text-sm rounded-full hover:scale-105 transition-transform delay cursor-none",
+          "flex gap-4 justify-center bg-secondary/90 border-3 border-border font-medium px-8 py-4 text-sm rounded-full hover:scale-105 transition-transform delay md:cursor-none",
         footer:
           "gap-1 text-sm text-muted-foreground hover:text-primary/80 transition-colors",
       },
