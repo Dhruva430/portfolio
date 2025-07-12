@@ -3,6 +3,8 @@ import Header from "@/components/header";
 import { Inter } from "next/font/google";
 import { MouseTrail } from "@/components/mouseTrail";
 const inter = Inter({ subsets: ["latin"] });
+import { Footer } from "@/components/footer";
+import { Toaster } from "@/components/toaster";
 
 export default function RootLayout({
   children,
@@ -15,6 +17,8 @@ export default function RootLayout({
         <MouseTrail />
         <Header />
         <main>{children}</main>
+        <Footer />
+        <Toaster />
       </body>
     </html>
   );

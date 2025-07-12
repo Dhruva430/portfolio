@@ -9,6 +9,9 @@ import {
   ArrowRight,
 } from "lucide-react";
 
+import { GITHUB_URL } from "@/data/constants";
+import { LINKEDIN_URL } from "@/data/constants";
+import { MAIL_ADDRESS } from "@/data/constants";
 import Linkedin from "@/assets/linkedin.svg";
 import Github from "@/assets/github.svg";
 
@@ -33,7 +36,6 @@ const skills = [
   { name: "JavaScript", level: 85 },
   { name: "React", level: 75 },
 ];
-import { Footer } from "@/components/footer";
 
 function Hero() {
   return (
@@ -90,15 +92,15 @@ function Hero() {
         </div>
         <div className="flex gap-6 p-4">
           <Github
-            href="https://github.com/Dhruva430"
+            href={GITHUB_URL}
             className="text-muted-foreground size-9 hover:text-primary "
           />
           <Linkedin
-            href="https://www.linkedin.com/in/dhruva430/"
+            href={LINKEDIN_URL}
             className="text-muted-foreground size-9 hover:text-primary"
           />
           <Mail
-            href="https://mail.google.com/mail/u/0/?fs=1&tf=cm&source=mailto&to=rdhruva12345@gmail.com"
+            href={MAIL_ADDRESS}
             className="text-muted-foreground size-9 hover:text-primary  "
           />
         </div>
@@ -373,7 +375,6 @@ export default function Home() {
       <Portfolio />
       <About />
       <Blog />
-      <Footer />
     </>
   );
 }
