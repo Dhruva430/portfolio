@@ -5,6 +5,10 @@ import { ArrowRight, Calendar } from "lucide-react";
 import Link from "next/link";
 import { getBlogs } from "./utils";
 
+export const metadata = {
+  title: "blog",
+};
+
 export default async function Blog() {
   const blogs = await getBlogs();
 

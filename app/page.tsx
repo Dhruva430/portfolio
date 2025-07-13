@@ -37,6 +37,9 @@ const skills = [
   { name: "React", level: 75 },
 ];
 
+export const metadata = {
+  title: "Dhruva Kushwaha",
+};
 function Hero() {
   return (
     <section className=" overflow-hidden select-none   mb-33 ">
@@ -53,7 +56,7 @@ function Hero() {
           Software Engineer | Full Stack Developer | Open Source Enthusiast
         </p>
         <p className="text-2base md:text-2xl max-w-4xl text-center text-muted-foreground mb-12 ">
-          Software Engineer passionate about{" "}
+          Software Engineer passionate about
           <span className="text-green-500">system-level programming</span>,
           clean code, and building performant web applications with
           <span className="text-blue-600"> Go</span>,
@@ -91,18 +94,15 @@ function Hero() {
           ))}
         </div>
         <div className="flex gap-6 p-4">
-          <Github
-            href={GITHUB_URL}
-            className="text-muted-foreground size-9 hover:text-primary "
-          />
-          <Linkedin
-            href={LINKEDIN_URL}
-            className="text-muted-foreground size-9 hover:text-primary"
-          />
-          <Mail
-            href={MAIL_ADDRESS}
-            className="text-muted-foreground size-9 hover:text-primary  "
-          />
+          <a href={GITHUB_URL}>
+            <Github className="text-muted-foreground size-9 hover:text-primary cursor-none" />
+          </a>
+          <a href={LINKEDIN_URL}>
+            <Linkedin className="text-muted-foreground size-9 hover:text-primary cursor-none" />
+          </a>
+          <a href={MAIL_ADDRESS}>
+            <Mail className="text-muted-foreground size-9 hover:text-primary  cursor-none" />
+          </a>
         </div>
       </div>
       <div className="flex justify-center gap-10 fixed left-0 right-0 bottom-0  top-140 h-screen w-screen max-w-[2000px] mx-auto -z-50">
