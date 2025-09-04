@@ -72,10 +72,10 @@ function Hero() {
             </Link>
           </Button>
           <Button variant={"secondaryFlicker"} size={"secondaryXL"} asChild>
-            <Link href={"/contact"}>
+            <a href="/resume.pdf" download>
               <Rocket className="animate-bounce delay-800" />
-              <span className="text-secondary-foreground">Get in Touch</span>
-            </Link>
+              <span className="text-secondary-foreground">Get Resume</span>
+            </a>
           </Button>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-2xl mx-auto mb-4">
