@@ -57,7 +57,7 @@ function Hero() {
         </p>
         <p className="text-2base md:text-2xl max-w-4xl text-center text-muted-foreground mb-12 ">
           Software Engineer passionate about
-          <span className="text-green-500">system-level programming</span>,
+          <span className="text-green-500"> system-level programming</span>,
           clean code, and building performant web applications with
           <span className="text-blue-600"> Go</span>,
           <span className="text-orange-500"> Rust</span>, and modern web
