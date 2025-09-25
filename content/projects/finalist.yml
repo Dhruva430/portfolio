@@ -1,0 +1,24 @@
+title: "Finalist"
+description: "A Discord-based scrim manager bot designed to organize, track, and manage community scrims with advanced slot handling, stats, and automation features."
+date: "2025"
+featured: true
+technologies:
+  - Go
+  - PostgreSQL
+  - Prisma
+  - DiscordJS
+  - TypeScript
+  - Docker
+  - Redis
+  - PostgreSQL
+  - REST API
+features:
+  - "Create and manage scrims with configurable slot systems"
+  - "Automatic slot assignment, substitution handling, and waitlist support"
+  - "Persistent storage of scrim history, team data, and user stats"
+  - "Time-based scrim tracking for analytics"
+  - "Interactive Discord commands for joining, leaving, and managing slots"
+  - "Custom embeds for scrim details and match announcements"
+  - "Community stats such as total scrims created, top players, and participation rates"
+  - "Admin dashboard for monitoring scrims, users, and team allocations"
+github: "https://github.com/finalistbot/finalist/"
