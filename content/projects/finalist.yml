@@ -1,24 +1,50 @@
 title: "Finalist"
-description: "A Discord-based scrim manager bot designed to organize, track, and manage community scrims with advanced slot handling, stats, and automation features."
+
+description: "A modern scrim and tournament management platform built for esports organizers, teams, and players. Finalist streamlines scrim scheduling, tournament hosting, team coordination, registrations, match management, and real-time competitive operations across public and management dashboards."
+
 date: "2025"
+
 featured: true
+
 technologies:
   - Go
   - PostgreSQL
-  - Prisma
-  - DiscordJS
+  - Next.js
+  - React
   - TypeScript
+  - CI/CD
+  - AWS
+  - Turborepo
   - Docker
   - Redis
-  - PostgreSQL
+  - Tailwind CSS
+  - WebSocket
   - REST API
+  - JWT Authentication
+  - Gin
+  - TanStack Query
+  - Turborepo
+
 features:
-  - "Create and manage scrims with configurable slot systems"
-  - "Automatic slot assignment, substitution handling, and waitlist support"
-  - "Persistent storage of scrim history, team data, and user stats"
-  - "Time-based scrim tracking for analytics"
-  - "Interactive Discord commands for joining, leaving, and managing slots"
-  - "Custom embeds for scrim details and match announcements"
-  - "Community stats such as total scrims created, top players, and participation rates"
-  - "Admin dashboard for monitoring scrims, users, and team allocations"
+  - "Create and manage daily or scheduled scrims and tournaments"
+  - "Dedicated management dashboard for organizers and admins"
+  - "Player dashboard for teams, registrations, and match participation"
+  - "Email OTP authentication with secure session handling"
+  - "Cross-subdomain authentication using shared cookie sessions"
+  - "Real-time scrim updates and match coordination"
+  - "Tournament scheduling and bracket management"
+  - "Team registration and roster management"
+  - "Slot management system for scrims and competitive lobbies"
+  - "Username onboarding and protected feature gating"
+  - "Organization and community-based scrim hosting"
+  - "Match tracking and participation analytics"
+  - "REST API architecture with scalable backend services"
+  - "Reusable shared UI and auth packages using Turborepo"
+  - "Responsive dashboards optimized for esports communities"
+  - "Role-separated platforms for public users and organizers"
+  - "Centralized authentication package shared across applications"
+  - "Persistent session management with automatic token refresh"
+  - "Modern modular frontend architecture with feature-based organization"
+  - "Production-ready monorepo structure for scalable development"
+
 github: "https://github.com/finalistbot/finalist/"
