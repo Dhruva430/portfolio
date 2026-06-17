@@ -146,6 +146,7 @@ const skills = [
     technologies: [
       "React",
       "Next.js",
+      "Astro",
       "Vue.js",
       "Tailwind CSS",
       "TanStack Query",
