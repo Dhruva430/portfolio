@@ -223,7 +223,20 @@ const experiences = [
       "Implemented Operating Licenses management for compliance and vehicle authorization tracking.",
       "Designed a central RBAC system for fine-grained, role-based access control across the platform.",
     ],
-    technologies: ["Next.js", "Go", "Gin", "PostgreSQL", "Redis", "Docker"],
+    technologies: [
+      "Next.js",
+      "Go",
+      "Gin",
+      "PostgreSQL",
+      "Redis",
+      "Docker",
+      "AWS",
+      "RabbitMQ",
+      "REST API",
+      "System Design",
+      "Turborepo",
+      "CI/CD",
+    ],
   },
 ];
 
