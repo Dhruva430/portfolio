@@ -1,0 +1,32 @@
+title: "HaulDrive — Fleet Management"
+
+description: "A fleet management platform for tracking vehicles, drivers, and hauling operations in real time. HaulDrive handles dispatch and route scheduling, job management, operating-license compliance, and fleet-wide telemetry, with role-based dashboards for operators and administrators."
+
+date: "2026"
+
+featured: true
+
+order: 105
+
+technologies:
+  - Next.js
+  - Go
+  - Gin
+  - PostgreSQL
+  - Redis
+  - TypeScript
+  - Docker
+  - REST API
+  - RBAC
+  - Tailwind CSS
+
+features:
+  - "Real-time tracking of vehicles and drivers across the fleet"
+  - "Jobs module to create, assign, and track hauling jobs"
+  - "Operating Licenses management for compliance and vehicle authorization"
+  - "Central RBAC system for fine-grained, role-based access control"
+  - "Go (Gin) REST APIs backed by PostgreSQL with Redis caching for low-latency reads and live location updates"
+  - "Maintenance and telemetry tracking, including fuel and service logs"
+  - "Operational dashboards and reporting for fleet-wide visibility"
+  - "Dispatch and route scheduling for hauling operations"
+  - "Redesigned frontend and backend for improved architecture, scalability, and maintainability"

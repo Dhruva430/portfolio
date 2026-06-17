@@ -2,28 +2,30 @@ title: "Finalist"
 
 description: "A modern scrim and tournament management platform built for esports organizers, teams, and players. Finalist streamlines scrim scheduling, tournament hosting, team coordination, registrations, match management, and real-time competitive operations across public and management dashboards."
 
-date: "2025"
+date: "2026"
 
 featured: true
 
+order: 104
+
 technologies:
   - Go
+  - Gin
   - PostgreSQL
+  - Redis
   - Next.js
   - React
   - TypeScript
-  - CI/CD
-  - AWS
-  - Turborepo
+  - Discord.js
+  - AWS S3
   - Docker
-  - Redis
+  - CI/CD
+  - Turborepo
   - Tailwind CSS
   - WebSocket
   - REST API
   - JWT Authentication
-  - Gin
   - TanStack Query
-  - Turborepo
 
 features:
   - "Create and manage daily or scheduled scrims and tournaments"

@@ -7,6 +7,9 @@ import {
   Server,
   Terminal,
   ArrowRight,
+  Briefcase,
+  MapPin,
+  Calendar,
 } from "lucide-react";
 
 import { GITHUB_URL } from "@/data/constants";
@@ -30,11 +33,11 @@ import MorphHandler from "@/components/morph/morph-handler";
 
 import { getBlogs } from "./blog/utils";
 const skills = [
-  { name: "Python", level: 100 },
+  { name: "TypeScript", level: 95 },
   { name: "Go", level: 90 },
-  { name: "Rust", level: 80 },
+  { name: "Python", level: 85 },
   { name: "JavaScript", level: 85 },
-  { name: "React", level: 75 },
+  { name: "React", level: 80 },
 ];
 
 export const metadata = {
@@ -135,17 +138,17 @@ function About() {
               {
                 icon: <Server />,
                 title: "Backend",
-                description: "Go, Rust, Node.js",
+                description: "Go, Gin, Node.js",
               },
               {
                 icon: <Database />,
                 title: "Database",
-                description: "PostgreSQL, MongoDB",
+                description: "PostgreSQL, MongoDB, Redis",
               },
               {
                 icon: <Terminal />,
-                title: "System",
-                description: "Linux, Docker, AWS",
+                title: "DevOps",
+                description: "Docker, Kubernetes, AWS",
               },
             ].map((item) => (
               <div
@@ -201,6 +204,92 @@ function About() {
               ))}
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const experiences = [
+  {
+    role: "Full Stack Developer",
+    company: "HaulDrive",
+    location: "Remote — London, U.K.",
+    period: "Dec 2025 – Apr 2026",
+    highlights: [
+      "Worked on HaulDrive, a fleet management platform for tracking vehicles, drivers, and hauling operations.",
+      "Redesigned both the frontend and backend, improving architecture, scalability, and maintainability.",
+      "Built the Jobs module to create, assign, and track hauling jobs across the fleet.",
+      "Implemented Operating Licenses management for compliance and vehicle authorization tracking.",
+      "Designed a central RBAC system for fine-grained, role-based access control across the platform.",
+    ],
+    technologies: ["Next.js", "Go", "Gin", "PostgreSQL", "Redis", "Docker"],
+  },
+];
+
+function Experience() {
+  return (
+    <section className="py-24 relative mb-30">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col items-center justify-center mb-10">
+          <h2 className="text-primary text-gradient-primary sm:text-5xl text-3xl font-bold mb-5">
+            Experience
+          </h2>
+          <span className="h-2 w-50 bg-primary rounded-full"></span>
+          <h3 className="text-base sm:text-xl p-4 text-muted-foreground">
+            Where I've been building and shipping
+          </h3>
+        </div>
+        <div className="max-w-3xl mx-auto space-y-8">
+          {experiences.map((exp, index) => (
+            <Card
+              key={`${exp.company}-${exp.role}`}
+              className="glass-card card-hover group animate-slide-up"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
+              <CardHeader>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                  <CardTitle className="text-xl flex items-center gap-2 group-hover:text-primary transition-colors">
+                    <Briefcase className="h-5 w-5 text-primary" />
+                    {exp.role}
+                  </CardTitle>
+                  <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                    <Calendar className="h-4 w-4" />
+                    {exp.period}
+                  </div>
+                </div>
+                <CardDescription className="flex flex-wrap items-center gap-x-3 gap-y-1 text-base">
+                  <span className="font-medium text-foreground">
+                    {exp.company}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <MapPin className="h-4 w-4" />
+                    {exp.location}
+                  </span>
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-2 mb-4">
+                  {exp.highlights.map((point) => (
+                    <li
+                      key={point}
+                      className="flex gap-2 text-muted-foreground text-base"
+                    >
+                      <span className="text-primary mt-1">▹</span>
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="flex flex-wrap gap-2">
+                  {exp.technologies.map((tech) => (
+                    <Badge key={tech} variant="secondary" className="text-xs">
+                      {tech}
+                    </Badge>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </div>
     </section>
@@ -374,6 +463,7 @@ export default function Home() {
       <Hero />
       <Portfolio />
       <About />
+      <Experience />
       <Blog />
     </>
   );
