@@ -1,0 +1,75 @@
+Finalist is a scrim and tournament platform built for the Indian battle-royale
+scene. It runs competitive events end to end — across five titles (PUBG, BGMI,
+Fortnite, Free Fire, and Apex Legends), from registration through slot lists,
+room details, results, and live leaderboards — and mirrors all of it into the
+Discord server the community already lives in. It's a product I built together
+with another engineer, splitting the platform between us.
+
+## The problem
+
+Indian BR scrims run on Discord, and almost none of the tooling around them does.
+A slot list is a pinned message. Results are screenshots a captain sends the
+organizer. The points table is a spreadsheet someone retypes after every match,
+and disputes get settled by whoever argues hardest.
+
+Western tournament tools don't fit, either. They're built around brackets — two
+teams, one match, a winner — while a BR event is 16–25 teams sharing a lobby,
+scored on placement plus kills, played several times. And they assume the browser
+is home base. Here, the community lives in Discord, so anything that drags an
+organizer out of Discord to use it simply doesn't get used.
+
+The target was a platform where organizers run the event on the web and players
+never have to leave their server.
+
+## Shape of the system
+
+The backend is a Go (Gin) API on PostgreSQL with Redis for caching and hot reads.
+The web surfaces are built in Next.js and TypeScript — separate dashboards for
+players and organizers — and a DiscordJS bot acts as a first-class client rather
+than a bolted-on webhook. The Discord-native layer is backed by Redis and
+RabbitMQ so events reach the server reliably and in order.
+
+Everything talks over one REST API, so a status label means the same thing
+whether you read it on the web dashboard or in a Discord slash-command response.
+
+## Registration, slots, and rosters
+
+The day-to-day of running scrims is mostly logistics, so that's where the design
+effort went:
+
+- **Auto-slotlists** with waitlists and bans, so a full lobby manages itself and
+  no-shows don't hold a slot hostage.
+- **Team rosters** with invite links and substitutes, so captains build their
+  squad without the organizer copying names by hand.
+- **Recurring scrim presets**, so a daily event is created once and repeats.
+
+## Live leaderboards, scoped to the org
+
+Standings are org-scoped and update live as results come in. Points are computed
+from recorded results rather than trusted from clients, and a leaderboard belongs
+to the organization running it — so communities keep their own competitive
+history instead of everything landing in one global pool.
+
+## A Discord-native layer
+
+The bot isn't a notifier stapled on at the end; it's how most players actually
+interact with an event. It installs via OAuth, exposes slash commands for the
+things players need mid-event, and handles room-detail reveals at the right
+moment. Redis and RabbitMQ sit behind it so a burst of activity — everyone
+checking slots at once — doesn't melt, and messages don't get lost between the
+API and the server.
+
+## Trade-offs
+
+- **One REST API for web and bot.** Both surfaces speak the same API, which keeps
+  behaviour consistent but means the API has to be careful about *who* is acting —
+  a Discord command must never do something the user couldn't do on the web.
+- **Redis as an accelerator, not a source of truth.** Caches and mirrors make the
+  common paths fast; when they're cold or missing, the system degrades to a
+  slower correct answer rather than a wrong one.
+
+## Where it is now
+
+Live at [finalist.live](https://finalist.live), serving 150+ users across the
+full event lifecycle — registration, slot lists, room details, results, and
+leaderboards — with the Discord layer mirroring it into each community's server.

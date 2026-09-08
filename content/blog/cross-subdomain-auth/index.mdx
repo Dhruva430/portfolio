@@ -1,0 +1,78 @@
+---
+title: "Cross-Subdomain Auth With Shared Cookie Sessions"
+description: "One login across play., app., and the marketing site — sharing a session across subdomains without asking the user to authenticate three times."
+pubDate: "2026-09-03"
+tags: ["Auth", "Backend", "Web Development", "System Design"]
+published: true
+---
+
+The esports platform I built ships as several surfaces on one domain: `play.` for
+players, `app.` for organizers, and the marketing site at the apex. They're
+separate Next.js apps, but to a user they're one product — so signing in on `app.`
+and then bouncing to `play.` and being asked to log in again is a bug, not a
+feature. The fix is a session that's valid across every subdomain.
+
+## The trick is the cookie domain
+
+A cookie set for `app.finalist.live` is only sent back to `app.finalist.live`. But
+a cookie set with `Domain=.finalist.live` (the apex) is sent to *every*
+subdomain. That one attribute is the whole mechanism:
+
+```go
+http.SetCookie(w, &http.Cookie{
+    Name:     "session",
+    Value:    token,
+    Domain:   ".finalist.live", // shared across all subdomains
+    Path:     "/",
+    HttpOnly: true,             // JS can't read it
+    Secure:   true,             // HTTPS only
+    SameSite: http.SameSiteLaxMode,
+    Expires:  time.Now().Add(sessionTTL),
+})
+```
+
+Now `play.`, `app.`, and the apex all send the same session cookie, and the API
+validates it the same way regardless of which surface the request came from.
+
+## Sessions and refresh
+
+I keep a short-lived access token and a longer-lived refresh token, both as
+apex-domain cookies. The access token expires quickly to limit the blast radius
+if it leaks; when it does, the client silently exchanges the refresh token for a
+new one:
+
+```go
+func Refresh(w http.ResponseWriter, r *http.Request) {
+    rt, err := r.Cookie("refresh")
+    if err != nil { unauthorized(w); return }
+
+    claims, err := verify(rt.Value)
+    if err != nil { unauthorized(w); return }
+
+    setSessionCookie(w, newAccessToken(claims.UserID))
+}
+```
+
+Because the refresh cookie is also scoped to `.finalist.live`, the exchange works
+from any surface — the user never notices their token rotating underneath them.
+
+## The gotchas
+
+- **`SameSite`.** `Lax` is fine for top-level navigation between your own
+  subdomains. If a surface needs to make cross-site requests (an embedded widget,
+  a different apex), you're into `SameSite=None; Secure` territory — don't reach
+  for it unless you actually need it.
+- **Local development.** `localhost` subdomains don't share cookies the way a real
+  apex does. I use `*.localhost` or a `/etc/hosts` alias so dev matches prod.
+- **CSRF.** A cookie that's sent automatically on every request to every
+  subdomain is exactly what CSRF exploits. Pair it with a CSRF token or rely on
+  `SameSite` plus checking `Origin` on state-changing requests.
+
+## Trade-offs
+
+Apex-scoped cookies are the simplest thing that works when all your surfaces live
+under one domain you control. The moment you need to share identity across
+*different* domains, cookies stop being enough and you're building real SSO —
+OAuth/OIDC with a central identity provider. That's a much bigger machine, and
+the reason to avoid it until you need it: for one product on one domain, a
+well-scoped cookie is all the SSO you need.

@@ -1,5 +1,15 @@
 title: "HaulDrive — Fleet Management"
 
+slug: "hauldrive"
+
+hideDetail: true
+
+tagline: "Fleet compliance for UK HGV operators"
+
+role: "Full Stack Developer"
+
+timeline: "Dec 2025 — Apr 2026"
+
 description: "A fleet management platform for tracking vehicles, drivers, and hauling operations in real time. HaulDrive handles dispatch and route scheduling, job management, operating-license compliance, and fleet-wide telemetry, with role-based dashboards for operators and administrators."
 
 date: "2026"

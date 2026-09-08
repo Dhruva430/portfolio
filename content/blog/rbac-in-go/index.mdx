@@ -1,0 +1,110 @@
+---
+title: "A Central RBAC System in Go"
+description: "How I designed fine-grained, role-based access control as a single source of truth across a Go backend — instead of scattering permission checks through handlers."
+pubDate: "2026-08-20"
+tags: ["Go", "Backend", "Auth", "System Design"]
+published: true
+---
+
+Every backend eventually grows a permissions problem. It usually starts as one
+line — `if user.Role == "admin"` — and by the time you have three roles and
+twenty endpoints, that line has been copy-pasted into forty places, each subtly
+different. When I built the access-control layer for a fleet platform with
+managers, drivers, and admins, I wanted the opposite: one place that answers a
+single question — *can this user do this thing to this resource?*
+
+## Why scattered checks fail
+
+Role strings compared inline are the classic trap. They spread, they drift, and
+they encode policy in the least searchable place possible: the middle of a
+handler. Add a role and you're grepping for every `== "admin"`. Worse, the check
+is coupled to the *role*, not the *capability* — so the day a manager needs one
+admin-only action, you either widen their role or add a special case, and both
+rot.
+
+The fix is one layer of indirection. Handlers should ask about **permissions**,
+never roles. Roles are just bundles of permissions, and the mapping lives in one
+place.
+
+## Modelling permissions
+
+I model a permission as an `action` on a `resource`:
+
+```go
+type Permission string
+
+const (
+    JobCreate   Permission = "job:create"
+    JobAssign   Permission = "job:assign"
+    VehicleRead Permission = "vehicle:read"
+    UserManage  Permission = "user:manage"
+)
+```
+
+Roles are sets of permissions, defined once:
+
+```go
+var rolePermissions = map[Role][]Permission{
+    RoleAdmin:   {JobCreate, JobAssign, VehicleRead, UserManage},
+    RoleManager: {JobCreate, JobAssign, VehicleRead},
+    RoleDriver:  {VehicleRead},
+}
+```
+
+That map *is* the policy. Reading it tells you the whole authorization model at a
+glance, and adding a role is a single entry — no handler ever changes.
+
+## One place to ask
+
+The only public surface is a `Can` check:
+
+```go
+func (a *Authorizer) Can(user User, p Permission) bool {
+    for _, granted := range rolePermissions[user.Role] {
+        if granted == p {
+            return true
+        }
+    }
+    return false
+}
+```
+
+For hot paths, precompute a `map[Permission]struct{}` per role at startup so the
+check is a hash lookup rather than a scan. The point is that callers don't know
+or care — they ask `Can(user, JobAssign)` and get a boolean.
+
+## Enforcing it at the edges
+
+Wrap it in middleware so a route declares what it needs and the check happens
+before the handler runs:
+
+```go
+func RequirePermission(a *Authorizer, p Permission) gin.HandlerFunc {
+    return func(c *gin.Context) {
+        user := CurrentUser(c)
+        if !a.Can(user, p) {
+            c.AbortWithStatusJSON(http.StatusForbidden, gin.H{
+                "error": "insufficient permissions",
+            })
+            return
+        }
+        c.Next()
+    }
+}
+
+r.POST("/jobs", RequirePermission(authz, JobCreate), createJob)
+```
+
+Two rules make this robust: **fail closed** (an unknown role grants nothing), and
+keep resource-level checks — "is this *your* job?" — inside the service, because
+ownership needs data the middleware doesn't have.
+
+## Trade-offs
+
+A static role→permission map is perfect until a customer wants custom roles at
+runtime; then the map moves into the database and `Can` reads from a cache. I
+deliberately didn't build that on day one — the indirection was worth it, the
+dynamic version wasn't yet. But because every handler already speaks in
+permissions, swapping the *source* of the mapping is a change in one file, and
+nothing above it notices. That's the whole payoff of putting the decision in one
+place.

@@ -1,0 +1,94 @@
+---
+title: "A Transactional Outbox With Postgres and pg_notify"
+description: "Feeding a Discord bot from Postgres without a message broker — no lost events, no second source of truth, and it catches up on its own after downtime."
+pubDate: "2026-08-27"
+tags: ["PostgreSQL", "Go", "Backend", "System Design"]
+published: true
+---
+
+When I was building an esports platform, the web app and a Discord bot both
+needed to reflect the same events — a slot opening, a match result, a room
+detail reveal. The naive version has the bot poll the API, or the API call the
+bot directly after a write. Both are quietly broken: the direct call can succeed
+while the database transaction rolls back, or the transaction can commit while
+the call fails. Now your two systems disagree, and nobody knows which is right.
+
+## The gap between "it happened" and "it was sent"
+
+Any time you do work in a transaction and *then* publish a notification, there's
+a window:
+
+```go
+tx.Commit()          // committed
+publishToDiscord()   // ...process dies here — event lost forever
+```
+
+Swap the order and you get the opposite failure: you publish, then the commit
+fails, and you've announced something that never happened. The problem is that
+the state change and the intent-to-notify live in two different systems, so they
+can't share an outcome.
+
+## Put the message in the same transaction
+
+The transactional outbox pattern removes the gap by writing the event into the
+*same database, in the same transaction* as the change that caused it:
+
+```sql
+CREATE TABLE comms_outbox (
+    id          BIGSERIAL PRIMARY KEY,
+    topic       TEXT        NOT NULL,
+    payload     JSONB       NOT NULL,
+    created_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
+    processed_at TIMESTAMPTZ
+);
+```
+
+```go
+// Both rows commit together, or neither does.
+_ = tx.Insert(matchResult)
+_ = tx.Insert(outboxRow{Topic: "match.result", Payload: result})
+return tx.Commit()
+```
+
+There is no window anymore. Either both the result and its outbox row are
+durable, or the transaction rolled back and there's nothing to send. One source
+of truth.
+
+## Waking the consumer with pg_notify
+
+Polling the outbox works but adds latency. Postgres can push instead:
+
+```sql
+CREATE FUNCTION notify_outbox() RETURNS trigger AS $$
+BEGIN
+    PERFORM pg_notify('comms', NEW.id::text);
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER comms_outbox_notify
+AFTER INSERT ON comms_outbox
+FOR EACH ROW EXECUTE FUNCTION notify_outbox();
+```
+
+The bot `LISTEN`s on the `comms` channel, wakes on each insert, and marks rows
+`processed_at` once delivered. A slow polling sweep runs alongside as a backstop
+— if a `NOTIFY` is missed (they aren't queued while you're disconnected), the
+sweep picks up any row with a null `processed_at`.
+
+## Why no Redis or RabbitMQ
+
+This is a real queue with at-least-once delivery and no extra infrastructure. No
+broker to run, no second store to keep consistent, no "which system is
+authoritative" question. If the bot is down for an hour, it catches up on boot by
+draining unprocessed rows — the events were never lost, they were just waiting.
+
+## Trade-offs
+
+`pg_notify` payloads are capped and notifications aren't durable, which is
+exactly why the outbox row (not the notification) is the source of truth — the
+`NOTIFY` is only a nudge. Consumers must be idempotent, since a crash between
+"delivered" and "marked processed" means you'll re-send. And it rides on your
+database's write throughput, so at very high volume a dedicated broker earns its
+keep. Below that line — which is most products — the outbox is simpler, cheaper,
+and harder to get wrong.

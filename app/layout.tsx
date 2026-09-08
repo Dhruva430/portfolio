@@ -5,6 +5,12 @@ import { MouseTrail } from "@/components/mouseTrail";
 const inter = Inter({ subsets: ["latin"] });
 import { Footer } from "@/components/footer";
 import { Toaster } from "@/components/toaster";
+import type { Metadata } from "next";
+import { BASE_URL } from "@/lib/constants";
+
+export const metadata: Metadata = {
+  metadataBase: new URL(BASE_URL),
+};
 
 export default function RootLayout({
   children,

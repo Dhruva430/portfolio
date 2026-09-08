@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Project } from "./utils";
 import Link from "next/link";
 import Image from "next/image";
-import { Calendar, ExternalLink } from "lucide-react";
+import { ArrowRight, Calendar, ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import Github from "@/assets/github.svg";
 import { cn, toTitleCase } from "@/lib/utils";
@@ -18,7 +18,12 @@ export default function ProjectCard({
   project: Project;
   index?: number;
 }) {
-  const primaryHref = project.demo ?? project.github;
+  const hasDetail = !project.hideDetail;
+  const caseStudyHref = `/projects/${project.slug}`;
+  // When there's no case study, the media/title link out to the live site instead.
+  const externalHref = project.demo ?? project.github;
+  const mediaHref = hasDetail ? caseStudyHref : externalHref ?? "#";
+  const mediaExternal = !hasDetail && Boolean(externalHref);
   const shownTech = project.technologies.slice(0, MAX_TECH);
   const extraTech = project.technologies.length - shownTech.length;
   const shownFeatures = project.features.slice(0, MAX_FEATURES);
@@ -35,9 +40,13 @@ export default function ProjectCard({
       {/* Media banner (only when an image is provided) */}
       {project.image && (
         <Link
-          href={primaryHref ?? "#"}
-          target={primaryHref ? "_blank" : undefined}
-          aria-label={`Open ${project.title}`}
+          href={mediaHref}
+          target={mediaExternal ? "_blank" : undefined}
+          aria-label={
+            hasDetail
+              ? `Read the ${project.title} case study`
+              : `Open ${project.title}`
+          }
           className="relative block aspect-[16/9] overflow-hidden"
         >
           <Image
@@ -81,13 +90,9 @@ export default function ProjectCard({
           )}
         </div>
         <h3 className="mb-2 text-xl font-semibold leading-tight transition-colors group-hover:text-primary">
-          {primaryHref ? (
-            <Link href={primaryHref} target="_blank">
-              {project.title}
-            </Link>
-          ) : (
-            project.title
-          )}
+          <Link href={mediaHref} target={mediaExternal ? "_blank" : undefined}>
+            {project.title}
+          </Link>
         </h3>
         <p className="line-clamp-3 text-sm leading-relaxed text-muted-foreground">
           {project.description}
@@ -128,35 +133,69 @@ export default function ProjectCard({
       </div>
 
       {/* Footer */}
-      <div className="mt-auto flex gap-2 border-t border-border px-6 py-4">
-        {project.demo && (
-          <Button size="sm" className="flex-1" asChild>
-            <Link
-              href={project.demo}
-              target="_blank"
-              aria-label="View live demo"
-            >
-              <ExternalLink className="h-4 w-4" />
-              Live Demo
-            </Link>
-          </Button>
-        )}
-        {project.github && (
-          <Button
-            size="sm"
-            variant={project.demo ? "outline" : "default"}
-            className="flex-1"
-            asChild
-          >
-            <Link
-              href={project.github}
-              target="_blank"
-              aria-label="View source on GitHub"
-            >
-              <Github className="h-4 w-4" />
-              Code
-            </Link>
-          </Button>
+      <div className="mt-auto flex items-center gap-2 border-t border-border px-6 py-4">
+        {hasDetail ? (
+          <>
+            <Button size="sm" className="flex-1" asChild>
+              <Link
+                href={caseStudyHref}
+                aria-label={`Read the ${project.title} case study`}
+              >
+                View Case Study
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </Button>
+            {project.demo && (
+              <Button size="sm" variant="outline" asChild>
+                <Link
+                  href={project.demo}
+                  target="_blank"
+                  aria-label="View live demo"
+                >
+                  <ExternalLink className="h-4 w-4" />
+                </Link>
+              </Button>
+            )}
+            {project.github && (
+              <Button size="sm" variant="outline" asChild>
+                <Link
+                  href={project.github}
+                  target="_blank"
+                  aria-label="View source on GitHub"
+                >
+                  <Github className="h-4 w-4" />
+                </Link>
+              </Button>
+            )}
+          </>
+        ) : (
+          <>
+            {project.demo && (
+              <Button size="sm" className="flex-1" asChild>
+                <Link href={project.demo} target="_blank" aria-label="View live demo">
+                  <ExternalLink className="h-4 w-4" />
+                  Live Demo
+                </Link>
+              </Button>
+            )}
+            {project.github && (
+              <Button
+                size="sm"
+                variant={project.demo ? "outline" : "default"}
+                className="flex-1"
+                asChild
+              >
+                <Link
+                  href={project.github}
+                  target="_blank"
+                  aria-label="View source on GitHub"
+                >
+                  <Github className="h-4 w-4" />
+                  Code
+                </Link>
+              </Button>
+            )}
+          </>
         )}
       </div>
     </Card>

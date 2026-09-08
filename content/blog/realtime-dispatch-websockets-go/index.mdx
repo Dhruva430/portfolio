@@ -1,0 +1,88 @@
+---
+title: "Real-Time Job Dispatch With WebSockets in Go"
+description: "Pushing jobs to a driver app and streaming live status back to a manager dashboard, built on a small Go WebSocket hub."
+pubDate: "2026-08-13"
+tags: ["Go", "WebSockets", "Real-time", "Backend"]
+published: true
+---
+
+On a fleet platform, dispatch is the part that has to feel alive. A manager
+assigns a job and expects the driver's phone to buzz *now*; the driver marks it
+en route and the manager's dashboard should update without a refresh. Polling can
+fake this, but it trades latency for load and still feels laggy. For live
+dispatch I reached for WebSockets and a small hub in Go.
+
+## Why not polling
+
+Polling every few seconds means every client hammers the API on a timer whether
+anything changed or not — wasted work at idle, and still up to N seconds stale
+when it matters. WebSockets flip it: one persistent connection per client, and
+the server pushes the instant something happens. For dispatch, where the whole
+value is immediacy, that's the right shape.
+
+## A hub in Go
+
+The core is a hub that owns the set of connected clients and serialises access to
+it through channels, so there are no locks around the map:
+
+```go
+type Hub struct {
+    clients    map[string]*Client // keyed by user ID
+    register   chan *Client
+    unregister chan *Client
+    broadcast  chan Message
+}
+
+func (h *Hub) Run() {
+    for {
+        select {
+        case c := <-h.register:
+            h.clients[c.userID] = c
+        case c := <-h.unregister:
+            delete(h.clients, c.userID)
+            close(c.send)
+        case msg := <-h.broadcast:
+            if c, ok := h.clients[msg.To]; ok {
+                c.send <- msg // targeted, not fan-out-to-all
+            }
+        }
+    }
+}
+```
+
+Each client runs two goroutines — one reading from the socket, one writing from a
+buffered `send` channel — which keeps a slow consumer from blocking the hub.
+
+## Delivering jobs and status
+
+Dispatch is just a targeted message. When a manager assigns a job, the HTTP
+handler persists it and then hands it to the hub for the specific driver:
+
+```go
+func assignJob(hub *Hub, job Job) {
+    save(job)
+    hub.broadcast <- Message{To: job.DriverID, Type: "job.assigned", Data: job}
+}
+```
+
+Status flows the other way over the same connection — the driver's app sends
+`job.enroute`, the server writes it and re-broadcasts to the manager watching
+that job. One connection, both directions.
+
+## Reconnects and reliability
+
+WebSockets drop — tunnels close, phones sleep, networks flap. Two things make
+that survivable: the client reconnects with backoff, and **the socket is a fast
+path, not the source of truth.** On reconnect the client refetches current state
+over REST, so a missed push during a 3-second drop self-heals. The socket makes
+things instant; the database makes them correct.
+
+## Trade-offs
+
+WebSockets need sticky sessions or a shared backplane once you run more than one
+API replica — a message for a driver connected to replica B is useless if it
+lands on replica A. Redis pub/sub or a similar fan-out fixes it, at the cost of
+another moving part. If your updates are one-directional (server → client only),
+Server-Sent Events are simpler and reconnect for free. I used WebSockets here
+because dispatch is genuinely bidirectional — and kept REST as the backbone so
+the real-time layer could stay a thin, disposable accelerator.

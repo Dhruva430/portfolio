@@ -1,0 +1,108 @@
+---
+title: "Compiling a Toy Language to WebAssembly"
+description: "Building a small language from scratch in Go — lexer, parser, code generator — and running it client-side in the browser through WASM."
+pubDate: "2026-07-30"
+tags: ["Go", "WebAssembly", "Compilers", "Systems"]
+published: true
+---
+
+I built Chai, a small programming language, mostly to stop treating compilers as
+magic. The goal wasn't a production language — it was to walk the whole path from
+raw source text to something that actually executes, and then run it somewhere
+fun: the browser, with no server, via WebAssembly.
+
+## The pipeline
+
+A compiler is a sequence of transformations, each turning one representation into
+a slightly more structured one:
+
+```
+source → [lexer] → tokens → [parser] → AST → [codegen] → WASM → [browser]
+```
+
+Writing it in Go kept each stage small and testable in isolation, which matters
+more than any single clever trick.
+
+## Lexing
+
+The lexer walks the source one rune at a time and emits tokens — the atoms of the
+language:
+
+```go
+func (l *Lexer) Next() Token {
+    l.skipWhitespace()
+    switch c := l.peek(); {
+    case isDigit(c):
+        return l.readNumber()
+    case isLetter(c):
+        return l.readIdentifier() // keyword or name
+    case c == '+':
+        l.advance()
+        return Token{Kind: PLUS, Literal: "+"}
+    // ...
+    }
+}
+```
+
+Nothing here understands *structure* yet — `let x = 1 +` is a perfectly valid
+token stream. That's the parser's job.
+
+## Parsing
+
+I used a Pratt parser (top-down operator precedence) because expression grammars
+with precedence and associativity fall out of it cleanly. Each token type
+registers how it behaves in prefix and infix position:
+
+```go
+func (p *Parser) parseExpression(prec int) Expr {
+    left := p.prefixFns[p.cur.Kind]()
+    for prec < p.precedence(p.peek.Kind) {
+        p.advance()
+        left = p.infixFns[p.cur.Kind](left)
+    }
+    return left
+}
+```
+
+The output is an AST — a tree where `1 + 2 * 3` is unambiguously
+`(1 + (2 * 3))`. Precedence stops being a special case and becomes the shape of
+the tree.
+
+## Generating WebAssembly
+
+WASM is a stack machine, which is a gift for a first code generator: you emit
+instructions in postfix order and the operands are already where they need to be.
+Walking the AST for `2 * 3` produces:
+
+```text
+i32.const 2
+i32.const 3
+i32.mul
+```
+
+Each AST node knows how to emit itself; the generator is a post-order traversal
+that concatenates the results. Compile the module to bytes, and you have
+something every browser can run natively.
+
+## Running it in the browser
+
+This is the payoff. The compiled `.wasm` is instantiated client-side and driven
+from a React + Tailwind playground — you type code, it compiles, and it executes
+in the same tab with no round-trip to a server:
+
+```ts
+const { instance } = await WebAssembly.instantiate(wasmBytes, imports);
+const result = instance.exports.main();
+```
+
+Because everything runs in the browser sandbox, the "backend" is a static file.
+
+## What I'd do differently
+
+The honest gaps are the interesting ones: no real type system (everything is an
+`i32`), error recovery in the parser stops at the first mistake instead of
+reporting several, and there's no optimization pass — the codegen emits exactly
+what the tree says. None of that mattered for the goal, which was to make the
+pipeline concrete. A language you built yourself stops being magic; it becomes a
+sequence of small, boring, understandable steps — which is the best thing that
+can happen to a scary topic.

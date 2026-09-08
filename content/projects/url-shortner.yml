@@ -1,4 +1,5 @@
 title: "RPS Multiplayer"
+slug: "rps-multiplayer"
 description: "A real-time Rock-Paper-Scissors multiplayer game with WebSocket communication and matchmaking."
 date: "2023"
 featured: true
