@@ -10,6 +10,8 @@ freelance: true
 
 order: 101
 
+demo: "https://heenzy.demos.levaras.com/"
+
 image: "/projects/heenzy.jpg"
 
 technologies:

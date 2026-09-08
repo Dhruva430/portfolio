@@ -10,6 +10,8 @@ freelance: true
 
 order: 103
 
+demo: "https://hotelmoana.demos.levaras.com/"
+
 image: "/projects/hotel-moana.webp"
 
 technologies:

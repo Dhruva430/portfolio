@@ -10,6 +10,8 @@ freelance: true
 
 order: 100
 
+demo: "https://auresca.vercel.app/"
+
 image: "/projects/auresca-care.png"
 
 technologies:

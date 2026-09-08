@@ -12,8 +12,11 @@ export const metadata: Metadata = {
 
 export default async function Projects() {
   const projects = await getProjects();
-  const featuredProjects = projects.filter((p) => p.featured);
-  const otherProjects = projects.filter((p) => !p.featured);
+  const freelanceProjects = projects.filter((p) => p.freelance);
+  const featuredProjects = projects.filter(
+    (p) => p.featured && !p.freelance
+  );
+  const otherProjects = projects.filter((p) => !p.featured && !p.freelance);
   return (
     <div className="min-h-screen py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -34,6 +37,17 @@ export default async function Projects() {
           <h2 className="text-2xl font-bold mb-8">Featured Projects</h2>
           <ProjectsGrid projects={featuredProjects} />
         </div>
+
+        {/* Freelance & Client Work */}
+        {freelanceProjects.length > 0 && (
+          <div className="mb-16">
+            <h2 className="text-2xl font-bold mb-2">Freelance & Client Work</h2>
+            <p className="text-muted-foreground mb-8">
+              Websites and products I've designed and shipped for clients.
+            </p>
+            <ProjectsGrid projects={freelanceProjects} />
+          </div>
+        )}
 
         {/* Other Projects */}
         <div>

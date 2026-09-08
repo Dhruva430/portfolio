@@ -311,7 +311,9 @@ function Experience() {
 
 async function Portfolio() {
   const allProjects = await getProjects();
-  const featuredProjects = allProjects.filter((project) => project.featured);
+  const featuredProjects = allProjects.filter(
+    (project) => project.featured && !project.freelance
+  );
   return (
     <section className="py-24 bg-page-background/40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -337,6 +339,32 @@ async function Portfolio() {
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
           </Button>
+        </div>
+      </div>
+    </section>
+  );
+}
+async function Freelance() {
+  const allProjects = await getProjects();
+  const freelanceProjects = allProjects.filter((project) => project.freelance);
+  if (freelanceProjects.length === 0) return null;
+  return (
+    <section className="py-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col items-center justify-center mb-10">
+          <h2 className="text-primary text-gradient-primary sm:text-5xl text-3xl font-bold mb-5">
+            Freelance & Client Work
+          </h2>
+          <span className="h-2 w-50 bg-primary rounded-full "></span>
+          <h3 className="p-4 text-muted-foreground text-base sm:text-xl">
+            Real-world websites and products I've designed and shipped for
+            clients.
+          </h3>
+        </div>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-start">
+          {freelanceProjects.map((project, index) => (
+            <ProjectCard key={project.title} project={project} index={index} />
+          ))}
         </div>
       </div>
     </section>
@@ -431,6 +459,7 @@ export default function Home() {
     <>
       <Hero />
       <Portfolio />
+      <Freelance />
       <About />
       <Experience />
       <Blog />
