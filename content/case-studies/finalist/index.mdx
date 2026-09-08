@@ -1,75 +1,178 @@
-Finalist is a scrim and tournament platform built for the Indian battle-royale
-scene. It runs competitive events end to end — across five titles (PUBG, BGMI,
-Fortnite, Free Fire, and Apex Legends), from registration through slot lists,
-room details, results, and live leaderboards — and mirrors all of it into the
-Discord server the community already lives in. It's a product I built together
-with another engineer, splitting the platform between us.
+Finalist is a scrim and tournament platform for the Indian battle-royale scene —
+one competition engine sitting behind several event formats, a lobby rotation
+that's fair by construction, and a Discord bot that stays in sync with the
+backend without a message broker. I built it together with another engineer,
+splitting the platform between us.
 
 ## The problem
 
-Indian BR scrims run on Discord, and almost none of the tooling around them does.
-A slot list is a pinned message. Results are screenshots a captain sends the
-organizer. The points table is a spreadsheet someone retypes after every match,
-and disputes get settled by whoever argues hardest.
+Indian BGMI and Free Fire scrims live on Discord, and the tooling around them is
+mostly improvised. The slot list is a pinned message. Results are screenshots a
+captain DMs the organizer. The points table is a spreadsheet someone retypes
+after every match — and when there's an argument about whether a team got its
+kill points, it's settled by whoever is loudest.
 
-Western tournament tools don't fit, either. They're built around brackets — two
+Western tournament platforms don't fit. They're built around brackets — two
 teams, one match, a winner — while a BR event is 16–25 teams sharing a lobby,
-scored on placement plus kills, played several times. And they assume the browser
-is home base. Here, the community lives in Discord, so anything that drags an
-organizer out of Discord to use it simply doesn't get used.
+scored on placement plus kills, played several times across groups that rotate
+between lobbies. They also assume the browser is home. Here the community lives in
+Discord, and anything that forces an organizer to leave Discord simply doesn't
+get used.
 
-The target was a platform where organizers run the event on the web and players
-never have to leave their server.
+So the target was clear: organizers run the event on the web, and players never
+have to leave the server they're already in.
 
 ## Shape of the system
 
-The backend is a Go (Gin) API on PostgreSQL with Redis for caching and hot reads.
-The web surfaces are built in Next.js and TypeScript — separate dashboards for
-players and organizers — and a DiscordJS bot acts as a first-class client rather
-than a bolted-on webhook. The Discord-native layer is backed by Redis and
-RabbitMQ so events reach the server reliably and in order.
+One Go API, one Postgres database, a set of Next.js surfaces, and a Discord bot
+that behaves as a first-class API client rather than a webhook.
 
-Everything talks over one REST API, so a status label means the same thing
-whether you read it on the web dashboard or in a Discord slash-command response.
+```text
+play.finalist.live   ─┐
+app.finalist.live    ─┤                   ┌── workers (lifecycle sweeps, push)
+finalist.live        ─┼──▶  Go API (Gin) ─┼── WebSocket hub
+platform (internal)  ─┘        │          └── S3
+                               ▼
+                          PostgreSQL
+                               │  trigger → comms_outbox → pg_notify
+                               ▼
+                          Discord bot
+```
 
-## Registration, slots, and rosters
+The surfaces are split by *who you are*, not by feature: players get `play`,
+organizers get `app`, public share pages live on the marketing domain, and staff
+get an internal console. They share a component library and a typed SDK generated
+from the API, so a status label means exactly the same thing everywhere.
 
-The day-to-day of running scrims is mostly logistics, so that's where the design
-effort went:
+The backend is layered — domain (models, state machines, repository interfaces),
+then services, then infrastructure (Postgres, workers, S3), then the HTTP ports.
+Queries are generated with sqlc so the types match the schema at compile time,
+and migrations are forward-only: the schema is in production, so regenerating it
+was never an option.
 
-- **Auto-slotlists** with waitlists and bans, so a full lobby manages itself and
-  no-shows don't hold a slot hostage.
-- **Team rosters** with invite links and substitutes, so captains build their
-  squad without the organizer copying names by hand.
-- **Recurring scrim presets**, so a daily event is created once and repeats.
+## One engine, six formats
 
-## Live leaderboards, scoped to the org
+The first real design decision. Supporting BR points tables, round robin, single
+and double elimination, Swiss, and gauntlet could easily have become six code
+paths through the same service, each with its own bugs around advancement and
+tiebreaks.
 
-Standings are org-scoped and update live as results come in. Points are computed
-from recorded results rather than trusted from clients, and a leaderboard belongs
-to the organization running it — so communities keep their own competitive
-history instead of everything landing in one global pool.
+Instead, the format-specific rules sit behind a single interface, and everything
+above it — entries, matches, standings, prizes — stays format-agnostic:
 
-## A Discord-native layer
+```go
+type Format interface {
+    // Validate the stage's JSON config at write time, so a bad config is a
+    // 400 rather than a panic mid-event.
+    ValidateConfig(raw json.RawMessage) (Config, error)
+    // Draw plans the stage — it never writes anything.
+    Draw(in DrawInput, cfg Config) (Draw, error)
+    // Progress recomputes derived state from the stage as it stands.
+    Progress(state StageState, cfg Config) (Progress, error)
+    // Score is the points a single result earns.
+    Score(cfg Config, r MatchResult, fieldSize int) float64
+}
+```
 
-The bot isn't a notifier stapled on at the end; it's how most players actually
-interact with an event. It installs via OAuth, exposes slash commands for the
-things players need mid-event, and handles room-detail reveals at the right
-moment. Redis and RabbitMQ sit behind it so a burst of activity — everyone
-checking slots at once — doesn't melt, and messages don't get lost between the
-API and the server.
+Each format is one file plus a registry entry. `Draw` is pure — it plans, it
+doesn't persist — so the draw for a 64-team double-elimination bracket can be
+tested without a database, and the service layer's only job is to save whatever
+the plan produced. A stage is one format, and a tournament is an ordered list of
+stages, so "groups into a bracket into a grand final" is composition, not a
+special case.
+
+## A rotation, not a shuffle
+
+This part is specific to Indian BR, and it's easy to get quietly wrong. Take four
+groups of 16 and a 32-slot lobby: each round, two groups share a lobby. Pick
+those pairings at random and one group can face the strongest group twice while
+another never does. Because placement points are relative to who else is in the
+lobby, that isn't a nuisance — it decides the result.
+
+The pairings are generated with the circle method, a true round-robin rotation:
+over N−1 rounds every pair of groups meets exactly once, and longer events cycle
+the set again. Every group appears once per round and the same number of times
+overall — and the tests assert that property directly instead of trusting a
+comment.
+
+```text
+Round 1   A+B   C+D
+Round 2   A+C   B+D
+Round 3   A+D   B+C
+```
+
+The map choice is tied to the round, not the lobby — an earlier bug had two
+halves of the same round playing different maps, which quietly broke fair
+scoring.
+
+## Results people can trust
+
+Every result is a potential dispute, so the flow assumes bad faith without
+treating anyone as a cheat. Captains submit placement and kills with a
+screenshot; a referee approves, edits, or rejects, and the queue holds disputes
+rather than resolving them by whoever replied first. Organizers can also enter
+results directly, since many events have a scorer watching the lobby.
+
+Two rules do most of the work:
+
+- **Points are never client-supplied.** The format computes them from the
+  recorded result at the moment it's approved.
+- **Points are frozen at record time.** If a preset is edited mid-event — which
+  happens — matches already played keep the points they earned.
+
+Standings recompute from the stage as it stands, with an explainable tiebreak
+chain (points, then wins, then kills, then head-to-head), so a team can be shown
+exactly why they're 4th and not 3rd.
+
+## Talking to Discord without a broker
+
+The bot doesn't scrape the API, and the backend doesn't call the bot directly. A
+Postgres trigger writes to a `comms_outbox` table in the *same transaction* as
+the change that caused it, and `pg_notify` wakes the bot; the bot listens, with a
+slow polling sweep as a backstop.
+
+That's a transactional outbox with no Redis queue and no separate broker.
+Nothing is lost between "it happened" and "it was queued", because there is no
+gap — either both rows commit or neither does. If the bot is down for an hour, it
+drains the backlog on boot.
+
+The bot reads and writes through the same public REST API a browser uses, with a
+bot token and an on-behalf-of header, so a Discord command can never do anything
+the user couldn't do on the web. Redis caches one thing here: a mirror of each
+guild's channels and roles, so the dashboard's pickers don't hammer the Discord
+gateway — and if it's missing, the pickers degrade to empty instead of failing.
+
+## Money, deliberately kept out
+
+India's Online Gaming Act 2025 draws a hard line around real-money gaming, and
+the cheapest way to stay clearly on the right side of it is to not go near it.
+
+Prize pools are a ledger: an organizer records what they owe and marks it paid
+with their own transfer reference. There's no wallet, no stored credits, no
+payment gateway, and no entry fees — the schema doesn't even have an entry-fee
+column, which is a much easier line to hold when the table simply can't express
+it. The reasoning is written down in the repo next to the rules it follows.
 
 ## Trade-offs
 
-- **One REST API for web and bot.** Both surfaces speak the same API, which keeps
-  behaviour consistent but means the API has to be careful about *who* is acting —
-  a Discord command must never do something the user couldn't do on the web.
-- **Redis as an accelerator, not a source of truth.** Caches and mirrors make the
-  common paths fast; when they're cold or missing, the system degrades to a
-  slower correct answer rather than a wrong one.
+- **Tournaments shipped on their own tables first.** Getting the formats working
+  mattered more than a perfect schema, so tournaments were built alongside scrims
+  with SQL views unioning both for leaderboards and history. That bought speed at
+  the cost of some duplication, which is being paid down by folding a scrim into
+  what it always was — an event with exactly one stage.
+- **The registry costs a layer of indirection.** Finding "how does Swiss pair
+  round 3" means opening one more file than a switch statement would. The payoff:
+  adding a new format touches no service code.
+- **Polling sweeps instead of a scheduler.** Lifecycle transitions (open
+  registration, check-in, auto-forfeit no-shows) run as set-based sweeps guarded
+  by a Postgres advisory lock, so every API replica runs the worker but exactly
+  one does the work. Simpler than a job queue and self-healing after downtime —
+  but it's tick-resolution, not to-the-second.
 
 ## Where it is now
 
-Live at [finalist.live](https://finalist.live), serving 150+ users across the
-full event lifecycle — registration, slot lists, room details, results, and
-leaderboards — with the Discord layer mirroring it into each community's server.
+Live at [finalist.live](https://finalist.live). Scrims run end to end —
+registration, slot lists, room details, results, and leaderboards — and
+tournaments ship the full set of formats with groups, brackets, standings, staff
+roles, and the payout ledger, with a `/tournament` command group surfacing
+standings, matches, check-in, and room details inside Discord.
