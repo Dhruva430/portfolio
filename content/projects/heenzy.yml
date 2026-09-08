@@ -1,0 +1,31 @@
+title: "Heenzy"
+
+description: "A modern e-commerce storefront for Heenzy, a streetwear and sneaker brand. Delivered as a freelance client project with a bold, editorial design, product drops, and a conversion-focused shopping experience."
+
+date: "2025"
+
+featured: true
+
+freelance: true
+
+order: 101
+
+image: "/projects/heenzy.jpg"
+
+technologies:
+  - Next.js
+  - React
+  - TypeScript
+  - Tailwind CSS
+  - Framer Motion
+  - Stripe
+  - Zustand
+
+features:
+  - "Bold, editorial hero with product-led storytelling"
+  - "Product drops and \"Fresh In\" collections with new-arrival tags"
+  - "Shopping cart and checkout flow with Stripe payments"
+  - "Flash sale and discount campaigns (e.g. Flash Drop 25%)"
+  - "Category filtering by mood and style"
+  - "Customer ratings and social proof for trust"
+  - "Fully responsive, conversion-focused storefront"

@@ -13,7 +13,9 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
         media: [768, 1024, 1440],
         useBalancedLayout: true,
       }}
-      render={(item, idx) => <ProjectCard project={item} key={idx} />}
+      render={(item, idx) => (
+        <ProjectCard project={item} index={idx} key={idx} />
+      )}
     />
   );
 }

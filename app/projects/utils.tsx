@@ -7,10 +7,12 @@ const ProjectSchema = z.object({
   description: z.string(),
   date: z.string(),
   featured: z.boolean().optional(),
+  freelance: z.boolean().optional(),
   technologies: z.array(z.string()),
   features: z.array(z.string()),
   github: z.string().url().optional(),
   demo: z.string().url().optional(),
+  image: z.string().optional(),
   order: z.number().default(0),
   status: z.enum(["completed", "early", "beta"]).default("completed"),
 });

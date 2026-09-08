@@ -27,17 +27,17 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { getProjects } from "./projects/utils";
+import ProjectCard from "./projects/project-card";
 import { Button } from "@/components/ui/button";
-import { toTitleCase } from "@/lib/utils";
 import MorphHandler from "@/components/morph/morph-handler";
 
 import { getBlogs } from "./blog/utils";
 const skills = [
   { name: "TypeScript", level: 95 },
-  { name: "Go", level: 90 },
-  { name: "Python", level: 85 },
-  { name: "JavaScript", level: 85 },
-  { name: "React", level: 80 },
+  { name: "Golang", level: 90 },
+  { name: "JavaScript", level: 90 },
+  { name: "React / Next.js", level: 88 },
+  { name: "Python", level: 82 },
 ];
 
 export const metadata = {
@@ -133,22 +133,22 @@ function About() {
               {
                 icon: <Code />,
                 title: "Frontend",
-                description: "React, Next.js, TypeScript",
+                description: "Next.js, React, Tailwind CSS",
               },
               {
                 icon: <Server />,
                 title: "Backend",
-                description: "Go, Gin, Node.js",
+                description: "Go, Gin, NestJS, Express",
               },
               {
                 icon: <Database />,
                 title: "Database",
-                description: "PostgreSQL, MongoDB, Redis",
+                description: "Postgres, MongoDB, MySQL",
               },
               {
                 icon: <Terminal />,
                 title: "DevOps",
-                description: "Docker, Kubernetes, AWS",
+                description: "Docker, Linux, CI/CD",
               },
             ].map((item) => (
               <div
@@ -325,53 +325,9 @@ async function Portfolio() {
             open-source contributions.
           </h3>
         </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20 items-start">
           {featuredProjects.map((project, index) => (
-            <Card
-              key={project.title}
-              className="glass-card card-hover group animate-slide-up"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <CardHeader className="flex-grow">
-                <CardTitle className="text-xl group-hover:text-primary transition-colors">
-                  {project.title}
-                </CardTitle>
-                <CardDescription className="text-base">
-                  {project.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex flex-wrap gap-2">
-                    {project.technologies.map((tech) => (
-                      <Badge key={tech} variant="secondary" className="text-xs">
-                        {tech}
-                      </Badge>
-                    ))}
-                  </div>
-                  <div className="flex items-center justify-between text-sm text-muted-foreground">
-                    <div className="flex items-center space-x-4">
-                      {project.github && (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="p-0 h-auto font-medium group-hover:text-primary"
-                          asChild
-                        >
-                          <Link href={project.github} target="_blank">
-                            <Github className="mr-2 h-4 w-4" />
-                            View on GitHub
-                          </Link>
-                        </Button>
-                      )}
-                    </div>
-                    <Badge variant="outline" className="text-xs">
-                      {toTitleCase(project.status)}
-                    </Badge>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <ProjectCard key={project.title} project={project} index={index} />
           ))}
         </div>
         <div className="text-center mt-12">

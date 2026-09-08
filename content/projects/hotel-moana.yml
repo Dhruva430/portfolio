@@ -1,0 +1,29 @@
+title: "Hotel Moana"
+
+description: "A luxury hotel landing and booking website for Hotel Moana, crafted to capture the elegance of a boutique resort. Built as a freelance client project with an immersive hero, refined typography, and a conversion-focused booking flow."
+
+date: "2025"
+
+featured: true
+
+freelance: true
+
+order: 103
+
+image: "/projects/hotel-moana.webp"
+
+technologies:
+  - Next.js
+  - React
+  - TypeScript
+  - Tailwind CSS
+  - Framer Motion
+  - Responsive Design
+
+features:
+  - "Immersive full-bleed hero with elegant, resort-grade typography"
+  - "Rooms and services showcase with a clear \"Book Now\" flow"
+  - "About and contact sections tailored to a boutique hotel brand"
+  - "Trivago rating highlight for instant social proof"
+  - "Smooth scroll animations and subtle micro-interactions"
+  - "Fully responsive, mobile-first layout optimized for bookings"

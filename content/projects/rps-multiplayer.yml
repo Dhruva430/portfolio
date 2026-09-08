@@ -5,16 +5,17 @@ featured: true
 technologies:
   - TypeScript
   - Next.js
-  - Prisma
+  - Golang
   - Zod
+  - Stripe
+  - PostgreSQL
   - Tailwind CSS
-  - PostgresSQL
 features:
-  - "Link shortening with custom backhalf"
-  - "QR Codes"
-  - "Can Edit Links and QR codes"
-  - "User friendly design"
-  - "Minimalistic design"
-  - "Overview (Track your links/QRs)"
+  - "Shorten URLs with a custom, memorable backhalf"
+  - "Generate branded QR codes with an embedded logo"
+  - "Edit existing shortened links and QR codes at any time"
+  - "Analytics dashboard with charts to track clicks across your links and QRs"
+  - "Stripe-powered payments for premium features"
+  - "Clean, minimalistic, and user-friendly interface"
 
 github: "https://github.com/Dhruva430/rps-websocket"

@@ -50,3 +50,7 @@ features:
   - "Production-ready monorepo structure for scalable development"
 
 github: "https://github.com/finalistbot/finalist/"
+
+demo: "https://finalist.live/"
+
+image: "/projects/finalist.png"

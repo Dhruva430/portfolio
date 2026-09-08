@@ -8,6 +8,10 @@ featured: true
 
 order: 105
 
+demo: "https://hauldrive.com/"
+
+image: "/projects/hauldrive.png"
+
 technologies:
   - Next.js
   - Go
